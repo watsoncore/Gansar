@@ -240,9 +240,11 @@ async def analyze_search_input(
         text = resolved
         ens_seed.input_resolution = {"query": sanitize_observation(original_query), "original_query": sanitize_observation(original_query),
             "normalized_query": profile.get("name") or original_query, "input_kind": "ens_name", "object_type": "ens_name",
-            "resolved_address": resolved, "analysis_address": resolved, "forward_verified": True,
-            "source": "ethereum_ens", "retrieved_at": profile.get("retrieved_at")}
-        emit("ens.resolve.complete", source="ethereum_ens", target=text, name=profile.get("name"), forward_verified=True)
+            "status": "resolved", "resolved_address": resolved, "analysis_address": resolved, "forward_verified": True,
+            "source": "ethereum_ens", "identity_chain": "eth", "chain_id": 1,
+            "retrieved_at": profile.get("retrieved_at"), "provenance": dict(profile.get("provenance") or {})}
+        emit("ens.resolve.complete", source="ethereum_ens", target=text, resolved_address=text,
+             name=profile.get("name"), forward_verified=True, chain="eth")
     chains = selected_chains or (["eth"] if ens_seed is not None or public_context_seed is not None else detect_candidates(text))
     ton_address = ton_canonical_address(text)
     explicit_nft = looks_like_nft_input(text)
@@ -265,7 +267,21 @@ async def analyze_search_input(
         if continuous and supports("continuous"):
             kwargs["continuous"] = True
         if continuous and on_report_ready and supports("on_checkpoint"):
+            last_preview_at = float("-inf")
+            last_preview_seconds = 0.0
             async def address_checkpoint(partial):
+                nonlocal last_preview_at, last_preview_seconds
+                partial.coverage["search_execution"] = {"status": "running", "data_complete": False,
+                    "partial_checkpoint": True}
+                if time.monotonic() - last_preview_at < 3 * last_preview_seconds:
+                    # Retain every collected observation durably. Only an
+                    # expensive intermediate presentation is coalesced; final
+                    # analysis/HTML still runs on the entire collected history.
+                    await retain_model(partial)
+                    emit("checkpoint.deferred", reason="measured_preview_cost",
+                         checkpoint="intermediate_html", transactions=len(partial.transactions))
+                    return
+                preview_started = time.monotonic()
                 from app.attribution.engine import correlate_attribution
                 await owned_thread_call(correlate_attribution, partial)
                 partial.coverage["search_execution"] = {"status": "running", "data_complete": False,
@@ -275,6 +291,8 @@ async def analyze_search_input(
                 saved = on_report_ready(partial, graph)
                 if inspect.isawaitable(saved):
                     await saved
+                last_preview_at = time.monotonic()
+                last_preview_seconds = max(0.0, last_preview_at - preview_started)
             kwargs["on_checkpoint"] = address_checkpoint
         emit("address.start", target=text, chains=chains)
         result = await address_analyzer(text, **kwargs)

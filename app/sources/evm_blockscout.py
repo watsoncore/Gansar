@@ -21,7 +21,7 @@ from app.aggregator.collection_audit import observe_page, stream_state
 from app.attribution.normalize import canonical_address
 from app.models.report import AddressReport, SourceHealth, Transaction
 from app.sources.base import Source
-from app.utils.http import _retry_after_seconds, http_error_message, request_json, shared_async_client
+from app.utils.http import _retry_after_seconds, http_error_message, request_diagnostics, request_json, shared_async_client
 from app.utils.event_identity import merge_provenance
 
 
@@ -94,6 +94,7 @@ class EvmBlockscoutSource(Source):
         self.name = "blockscout_" + chain
         self._host, self._asset = _INSTANCES[chain]
         self._timeout = timeout_seconds
+        self._blocked = False
 
     async def fetch(self, address: str) -> AddressReport:
         out = AddressReport(target_address=address, detected_chains=[self.chain], sources_used=[self.name])
@@ -118,50 +119,86 @@ class EvmBlockscoutSource(Source):
 
     def _health(self, out, status, detail):
         out.source_health.append(SourceHealth(source=self.name, status=status, timeout_seconds=self._timeout,
-            retry_strategy="shared cache; host serialized; >=0.35s; bounded Retry-After; existing global deadline", details=detail, partial=True))
+            retry_strategy="shared cache; two in-flight requests; starts >=0.35s apart; bounded retries; Retry-After; existing global deadline", details=detail, partial=True))
 
     async def _get(self, client, endpoint, out, params=None):
         gates = _GATES.setdefault(asyncio.get_running_loop(), {})
-        gate = gates.setdefault(self._host, {"lock": asyncio.Lock(), "ready": 0.0})
-        for attempt in range(2):
-            async with gate["lock"]:
-                if self._blocked:
-                    return None
-                delay = gate["ready"] - time.monotonic()
-                if delay > self._timeout:
-                    self._health(out,"rate_limited","Provider cooldown exceeds this request budget; no early retry issued")
-                    return None
-                if delay > 0:
-                    await asyncio.sleep(delay)
-                try:
-                    gate["ready"] = time.monotonic() + .35
-                    data = await request_json(client, "GET", self._host + endpoint, params=params, retries=0)
-                    if not isinstance(data, dict):
-                        raise ValueError("Blockscout response is not an object")
-                    if data.get("error") or data.get("message") == "Forbidden":
-                        raise ValueError("Blockscout returned an API error")
-                    return data
-                except asyncio.CancelledError:
-                    raise
-                except httpx.HTTPStatusError as exc:
-                    status = exc.response.status_code
-                    if status == 429:
-                        wait = _retry_after_seconds(exc.response)
-                        gate["ready"] = max(gate["ready"], time.monotonic() + (wait if wait is not None else 5.0))
-                        self._health(out, "rate_limited", "HTTP 429; provider Retry-After retained; available sources remain usable")
-                        if gate["ready"]-time.monotonic()>self._timeout:
-                            self._blocked=True
-                            out.errors.append(f"{self.name}: rate_limited: Retry-After exceeds this request budget")
-                            return None
-                        if attempt == 0:
-                            continue
-                    if status in {401, 402, 403, 429}:
+        gate = gates.setdefault(self._host, {"lock": asyncio.Lock(), "slots": asyncio.Semaphore(2), "ready": 0.0})
+        metrics = out.collection_audit.setdefault("http", {}).setdefault(self.name,
+            {"requests": [], "retry_wait_seconds": 0.0, "rate_wait_seconds": 0.0,
+             "retries": 0, "max_concurrent_requests": 2, "minimum_start_interval_seconds": .35})
+        for attempt in range(3):
+            response = None
+            try:
+                async with gate["slots"]:
+                    # Reserve starts under the host gate, then release the lock
+                    # while awaiting HTTP. Independent cursor streams can use
+                    # two slots without bypassing cooldown or the start interval.
+                    async with gate["lock"]:
+                        while True:
+                            if self._blocked:
+                                return None
+                            delay = gate["ready"] - time.monotonic()
+                            if delay > self._timeout:
+                                self._health(out, "rate_limited", "Provider cooldown exceeds this request budget; no early retry issued")
+                                return None
+                            if delay <= 0:
+                                break
+                            waiting = time.monotonic()
+                            await asyncio.sleep(delay)
+                            metrics["rate_wait_seconds"] += time.monotonic() - waiting
+                        gate["ready"] = time.monotonic() + .35
+                    started = time.monotonic()
+                    entry = {"stream": endpoint.rsplit("/", 1)[-1], "attempt": attempt + 1,
+                             "cursor": dict(params or {}), "status": "pending"}
+                    metrics["requests"].append(entry)
+                    try:
+                        with request_diagnostics(metrics):
+                            data = await request_json(client, "GET", self._host + endpoint, params=params, retries=0)
+                        if not isinstance(data, dict):
+                            raise ValueError("Blockscout response is not an object")
+                        if data.get("error") or data.get("message") == "Forbidden":
+                            raise ValueError("Blockscout returned an API error")
+                        entry["status"] = "ok"
+                        return data
+                    except BaseException as exc:
+                        entry["status"] = (exc.response.status_code if isinstance(exc, httpx.HTTPStatusError)
+                                           else "cancelled" if isinstance(exc, asyncio.CancelledError) else type(exc).__name__)
+                        raise
+                    finally:
+                        entry["seconds"] = round(time.monotonic() - started, 6)
+            except asyncio.CancelledError:
+                raise
+            except httpx.HTTPStatusError as exc:
+                response = exc.response
+                status = response.status_code
+                if status == 429:
+                    wait = _retry_after_seconds(response)
+                    gate["ready"] = max(gate["ready"], time.monotonic() + (wait if wait is not None else 5.0))
+                    self._health(out, "rate_limited", "HTTP 429; provider Retry-After retained; available sources remain usable")
+                    if gate["ready"] - time.monotonic() > self._timeout:
                         self._blocked = True
-                    out.errors.append(f"{self.name}: {http_error_message(exc)}")
-                    return None
-                except (httpx.HTTPError, ValueError) as exc:
-                    out.errors.append(f"{self.name}: {http_error_message(exc)}")
-                    return None
+                        out.errors.append(f"{self.name}: rate_limited: Retry-After exceeds this request budget")
+                        return None
+                if status in {401, 402, 403}:
+                    self._blocked = True
+                retryable = status in {429, 500, 502, 503, 504}
+                error = http_error_message(exc)
+            except (httpx.HTTPError, ValueError) as exc:
+                retryable = isinstance(exc, httpx.TransportError)
+                error = http_error_message(exc)
+            if not retryable or attempt == 2:
+                out.errors.append(f"{self.name}: {error}")
+                return None
+            metrics["retries"] += 1
+            delay = _retry_after_seconds(response)
+            if delay is None:
+                delay = min(5.0, .7 * (2 ** attempt))
+            # Never shorten a provider Retry-After. The parent deadline owns
+            # cancellation and partial-page cursor persistence.
+            waiting = time.monotonic()
+            await asyncio.sleep(delay)
+            metrics["retry_wait_seconds"] += time.monotonic() - waiting
         return None
 
     async def _history(self, client, address, out, kind):
@@ -183,10 +220,7 @@ class EvmBlockscoutSource(Source):
         cursor = state.get("next_cursor") or {}
         seen_pages, seen_cursors = set(), set()
         recorded = set(state.get("observed_record_keys", []))
-        for _ in range(1000 if getattr(self, "_continuous", False) else 1):
-            if len(out.transactions) >= 100_000:
-                state["stop_reason"] = "operation_memory_safety_ceiling"
-                return
+        while True:
             params = {"type": "ERC-20", **cursor} if kind == "token-transfers" else cursor
             try:
                 response = await self._get(client, f"/api/v2/addresses/{address}/{kind}", out, params)
@@ -220,6 +254,7 @@ class EvmBlockscoutSource(Source):
                     state.setdefault("observed_record_keys", []).append(key)
                     recorded.add(key)
             unparsed = []
+            normalizing = time.monotonic()
             for row in rows:
                 try:
                     tx = self._native(row, address) if kind == "transactions" else self._token(row, address)
@@ -228,6 +263,7 @@ class EvmBlockscoutSource(Source):
                 except (ValueError, TypeError, OverflowError, KeyError) as exc:
                     unparsed.append({"provider_record":row,"error":str(exc)})
                     out.errors.append(f"{self.name}: {kind}_parse: {exc}")
+            state["normalization_seconds"] = state.get("normalization_seconds", 0.0) + time.monotonic() - normalizing
             if unparsed:
                 state.update(exhausted=False,next_cursor=cursor,stop_reason="unparsed_provider_records",
                              pending_provider_page=response,unparsed_provider_records=unparsed)
@@ -242,7 +278,9 @@ class EvmBlockscoutSource(Source):
                 return
             seen_cursors.add(encoded)
             cursor = next_cursor
-        state["stop_reason"] = "page_safety_ceiling" if getattr(self, "_continuous", False) else "legacy_page_limit"
+            if not getattr(self, "_continuous", False):
+                state["stop_reason"] = "legacy_page_limit"
+                return
 
     def _direction(self, target, frm, to):
         return "self" if target == frm == to else "out" if target == frm else "in" if target == to else "unknown"
@@ -294,27 +332,73 @@ class EvmBlockscoutSource(Source):
                  "execution_confirmation":"Indexed token row alone does not establish receipt execution success"})
 
     async def _internal_context(self, client, address, out):
-        state = stream_state(out, self.name, "internal_call_observations", record_type="contract_call_context")
-        state.update(history_complete=False, status="unavailable", transaction_edge=False,
-                     limitation="One returned page only; call/delegatecall/value are context, not additional financial transactions")
-        response = await self._get(client, f"/api/v2/addresses/{address}/internal-transactions", out)
-        if response is None:
-            state["stop_reason"]="provider_error"
-            return
-        rows=response.get("items")
-        if not isinstance(rows,list) or not all(isinstance(row,dict) for row in rows):
-            state["stop_reason"]="malformed_page"
-            out.errors.append(f"{self.name}: internal call context: items missing")
-            return
-        try:cursor=_next_cursor(response.get("next_page_params"))
-        except ValueError as exc:
-            state["stop_reason"]="unsupported_cursor"
-            out.errors.append(f"{self.name}: internal call context: {exc}")
-            return
-        observe_page(state,rows[:50],cursor,exhausted=cursor is None)
-        state.update(status="partial", records=rows[:50], row_limit=50, source_rows=len(rows),
-                     records_truncated=len(rows)>50, transaction_edge=False,
+        resume = getattr(self, "_resume_state", {}).get("internal_call_observations", {})
+        state = stream_state(out, self.name, "internal_call_observations", resume=resume,
+                             record_type="contract_call_context")
+        state.update(history_complete=False, status="partial", transaction_edge=False,
+                     limitation="Returned internal calls are retained as context, not additional financial transactions",
                      source_url=f"{self._host}/api/v2/addresses/{address}/internal-transactions")
+        records = state["records"] = list(state.get("records", []))
+        head_name = "internal_call_observations_refresh"
+        old_head = getattr(self, "_resume_state", {}).get(head_name, {})
+        if getattr(self, "_incremental", False) or old_head and not old_head.get("exhausted"):
+            head = stream_state(out, self.name, head_name,
+                resume=old_head if old_head and not old_head.get("exhausted") else {},
+                record_type="contract_call_context")
+            head.update(history_complete=False, transaction_edge=False)
+            await self._internal_window(client, address, out, head, records, allow_overlap=True)
+        if not state.get("exhausted"):
+            await self._internal_window(client, address, out, state, records)
+
+    async def _internal_window(self, client, address, out, state, records, *, allow_overlap=False):
+        known = {hashlib.sha256(json.dumps(row, sort_keys=True, default=str).encode()).hexdigest() for row in records}
+        seen_cursors = set()
+        seen_pages = set()
+        cursor = state.get("next_cursor") or {}
+        while True:
+            try:
+                response = await self._get(client, f"/api/v2/addresses/{address}/internal-transactions", out, cursor)
+            except asyncio.CancelledError:
+                state.update(exhausted=False, stop_reason="session_stopped_or_deadline")
+                raise
+            if response is None:
+                state["stop_reason"] = "provider_error"
+                return
+            rows = response.get("items")
+            try:
+                if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+                    raise ValueError("internal call items missing")
+                next_cursor = _next_cursor(response.get("next_page_params"))
+            except ValueError as exc:
+                state.update(stop_reason="malformed_page", pending_provider_page=response)
+                out.errors.append(f"{self.name}: internal call context: {exc}")
+                return
+            row_keys = [hashlib.sha256(json.dumps(row, sort_keys=True, default=str).encode()).hexdigest() for row in rows]
+            digest = hashlib.sha256("\n".join(row_keys).encode()).hexdigest()
+            if rows and digest in seen_pages:
+                state.update(exhausted=False, stop_reason="repeated_page")
+                return
+            seen_pages.add(digest)
+            overlap = allow_overlap and bool(rows) and all(key in known for key in row_keys)
+            for key, row in zip(row_keys, rows):
+                if key not in known:
+                    records.append(row)
+                    known.add(key)
+            observe_page(state, rows, next_cursor, exhausted=next_cursor is None or overlap,
+                         stop_reason="overlap_stored_history" if overlap else None)
+            state.update(records_truncated=False, retained_records=len(records))
+            state.pop("pending_provider_page", None)
+            if next_cursor is None or overlap:
+                return
+            encoded = json.dumps(next_cursor, sort_keys=True)
+            if not rows or encoded in seen_cursors or next_cursor == cursor:
+                state.update(exhausted=False, stop_reason="repeated_or_missing_cursor")
+                return
+            seen_cursors.add(encoded)
+            cursor = next_cursor
+            if not getattr(self, "_continuous", False):
+                state["stop_reason"] = "legacy_page_limit"
+                return
 
 
 def _kind(tx):

@@ -608,10 +608,12 @@ def _search_progress(state: InvestigationState, event: dict) -> None:
         catalog = next((item for item in SOURCE_CATALOG if item.name == source), None)
         item = state.source_states.setdefault(source, SourceRunState(source, "ton" if nft_source else catalog.chain if catalog else "multi", "nft" if nft_source else "api"))
         state.current_source = source
-        if stage in {"source.start", "nft.request_started", "attribution.request_started"}:
+        if stage in {"source.start", "ens.resolve.start", "nft.request_started", "attribution.request_started"}:
             item.status = "running"
-        elif stage in {"source.result", "nft.request_completed", "attribution.request_completed"}:
+        elif stage in {"source.result", "ens.resolve.complete", "ens.resolve.error", "nft.request_completed", "attribution.request_completed"}:
             status = event.get("status", "unknown")
+            if stage == "ens.resolve.complete":
+                status = "ok"
             item.status = "online" if status in {"ok", "empty", "partial", "experimental"} else "error" if status in {"timeout", "error", "unavailable", "not_found"} else status
             item.details = str(event.get("error") or status)
             item.tx_count = int(event.get("transactions", event.get("events", item.tx_count)) or 0)
@@ -621,6 +623,10 @@ def _search_progress(state: InvestigationState, event: dict) -> None:
             item.details = f"{stage}: {delay}s"
     seconds = event.get("elapsed_seconds", time.monotonic()-state.started)
     detail = source or event.get("target") or event.get("scope") or event.get("status") or ""
+    if stage == "ens.resolve.complete":
+        detail = f"{event.get('name', '')} → {event.get('resolved_address') or event.get('target', '')} · Ethereum"
+    elif stage == "ens.resolve.start":
+        detail = str(event.get("query") or source or "")
     if event.get("requests") is not None:
         detail = f"{detail} requests={event['requests']} assets={event.get('assets', '?')} events={event.get('events', '?')}"
     state.feed.append(f"[>] {seconds:.1f}s {stage} {detail}")
@@ -973,6 +979,7 @@ def _command_progress() -> Callable[[dict], None]:
     from app.utils.security import sanitize_observation
     previous_time = float("-inf")
     important = {"investigation.finalizing", "initial_html.ready", "investigation.deep", "investigation.checkpoint", "investigation.stopping", "investigation.stopped", "investigation.complete", "input.classified", "input.error", "target.resolved", "address.start", "address.complete", "address.error",
+        "ens.resolve.start", "ens.resolve.complete", "ens.resolve.error",
         "nft.input_resolution", "nft.target_resolved", "nft.primary_history", "nft.owner_inventory", "nft.owner_history",
         "nft.transaction_details", "nft.related_wallets", "nft.complete", "checkpoint.html.complete", "html.start", "html.complete"}
     def progress(event: dict) -> None:
@@ -985,7 +992,11 @@ def _command_progress() -> Callable[[dict], None]:
         previous_time = now
         stamp = event.get("timestamp") or datetime.now(timezone.utc).isoformat()
         detail = " ".join(str(event[key]) for key in ("source", "status") if event.get(key))
-        if stage == "initial_html.ready":
+        if stage == "ens.resolve.complete":
+            detail = f"{event.get('name', '')} → {event.get('resolved_address') or event.get('target', '')} · Ethereum"
+        elif stage == "ens.resolve.start":
+            detail = str(event.get("query") or "")
+        elif stage == "initial_html.ready":
             detail = f"{event.get('elapsed_seconds', 0):.1f}s · {event.get('path', '')} · " + ("предварительный HTML готов; глубокое исследование продолжается" if LANGUAGE == "ru" else "preliminary HTML ready; deep investigation continues")
         elif stage == "investigation.deep":
             detail = "глубокое исследование продолжается · Ctrl+C: сохранить и остановить" if LANGUAGE == "ru" else "deep investigation continues · Ctrl+C: save and stop"

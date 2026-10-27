@@ -4,15 +4,49 @@ from datetime import datetime
 from decimal import Decimal, localcontext
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, ValidationInfo, model_validator
 from app.utils.security import sanitize_observation, portable_observation
+
+
+_PROTECTED_REPORT_TREE = object()
 
 
 class ObservationModel(BaseModel):
     @model_validator(mode="before")
     @classmethod
-    def protect_secrets(cls, value: Any) -> Any:
-        return portable_observation(value) if isinstance(value, dict) else value
+    def protect_secrets(cls, value: Any, info: ValidationInfo) -> Any:
+        if not isinstance(value, dict):
+            return value
+        protected = info.context.get(_PROTECTED_REPORT_TREE) if isinstance(info.context, dict) else None
+        if protected is not None and protected.get(id(value)) is value:
+            # This exact container was already redacted as part of its parent
+            # in this one validation call. All field/model validators still run.
+            return value
+        clean = portable_observation(value)
+        if protected is not None:
+            pending = [clean]
+            while pending:
+                item = pending.pop()
+                if isinstance(item, dict):
+                    protected[id(item)] = item
+                    pending.extend(child for child in item.values() if isinstance(child, (dict, list)))
+                elif isinstance(item, list):
+                    pending.extend(child for child in item if isinstance(child, (dict, list)))
+        return clean
+
+
+def validated_report_copy(report, *, exclude=None):
+    """Validate a detached report while redacting each tree just once.
+
+    The memo is private, scoped to this call and holds exact object references;
+    provider fields cannot mark themselves trusted. No cache survives the call.
+    """
+    protected = {}
+    try:
+        return AddressReport.model_validate(report.model_dump(mode="python", exclude=exclude),
+            context={_PROTECTED_REPORT_TREE: protected})
+    finally:
+        protected.clear()
 
 
 Chain = Literal["btc", "doge", "eth", "bsc", "polygon", "tron", "ton", "solana", "arbitrum", "optimism", "avalanche"]

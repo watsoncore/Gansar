@@ -127,7 +127,7 @@ def merge_audit(base: dict, other: dict) -> None:
         for stream, state in streams.items():
             existing = target.get(stream, {})
             target[stream] = {**existing, **state}
-    for name in ("stages", "source_counts"):
+    for name in ("stages", "source_counts", "http"):
         for key, value in other.get(name, {}).items():
             if name == "stages" and key == "normalization" and isinstance(value, dict):
                 entry = base.setdefault(name, {}).setdefault(key, {"sources": {}})

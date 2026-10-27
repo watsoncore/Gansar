@@ -15,6 +15,7 @@ _SECRET_KEYS = re.compile(r"(?:api[_-]?key|authorization|access[_-]?token|auth[_
 _SECRET_TEXT = re.compile(r"(?i)(\b(?:api[_-]?key|access[_-]?token|authorization|authClientToken|password|secret)\s*[=:]\s*)([^\s&,;\"']+)")
 _BEARER_TEXT = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+")
 _OBSERVATION_URL = re.compile(r"https?://[^\s<>\"']+")
+_REDACTION_DELIMITERS = re.compile(r"[\s=:]")
 _DEEP_TAIL_ENCODING = "json_deep_provider_tail"
 _DEEP_TAIL_DECODE_DEPTH = 512
 _TEXT_CACHE_ENTRIES = 2048
@@ -174,9 +175,15 @@ def sanitize_observation(value: Any) -> Any:
                 if cached is not None:
                     text_results.move_to_end(item)
                     return cached
-            clean = _BEARER_TEXT.sub("Bearer [REDACTED]", item)
-            clean = _SECRET_TEXT.sub(r"\1[REDACTED]", clean)
-            clean = _OBSERVATION_URL.sub(lambda match: sanitize_url(match.group()), clean)
+            if not _REDACTION_DELIMITERS.search(item):
+                # Every protected text form requires whitespace, '=' or ':'.
+                # Long hashes/ABI hex contain none; avoid three expensive full
+                # scans while preserving exactly the same redaction semantics.
+                clean = item
+            else:
+                clean = _BEARER_TEXT.sub("Bearer [REDACTED]", item)
+                clean = _SECRET_TEXT.sub(r"\1[REDACTED]", clean)
+                clean = _OBSERVATION_URL.sub(lambda match: sanitize_url(match.group()), clean)
             if cacheable and _TEXT_CACHE_ENTRIES > 0:
                 if len(text_results) >= _TEXT_CACHE_ENTRIES:
                     text_results.popitem(last=False)

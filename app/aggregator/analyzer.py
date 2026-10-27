@@ -3839,7 +3839,8 @@ async def analyze_address(address: str, *, timeout_seconds: float = 18.0, max_tx
     merged = _dedupe_report(merged)
 
     from app.utils.async_tasks import owned_thread_call
-    merged = await owned_thread_call(lambda: AddressReport.model_validate(merged.model_dump(mode="python")))
+    from app.models.report import validated_report_copy
+    merged = await owned_thread_call(validated_report_copy, merged)
     from app.attribution.engine import correlate_attribution
     await owned_thread_call(correlate_attribution, merged)
     refresh_audit(merged, "model", final_analysis=True)

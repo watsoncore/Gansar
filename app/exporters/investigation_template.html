@@ -874,6 +874,7 @@
       .graph-shell.mode-tree { min-height: 760px; }
       .graph-shell.mode-tree #graphCanvas, .graph-shell.mode-tree #minimap, .graph-shell.mode-tree #graph3d, .graph-shell.mode-tree .hud, .graph-shell.mode-tree #tip, .graph-shell.mode-tree .graph-3d-labels, .graph-shell.mode-tree .graph-3d-status { display: none !important; }
       .graph-tree-active .controls > .graph-investigation-mode, .graph-tree-active #graphSummary, .graph-tree-active #graphLegend, .graph-tree-active .controls > .search-box, .graph-tree-active #nodeType, .graph-tree-active #edgeType, .graph-tree-active .controls > label.chip { display: none; }
+      .graph-tree-active .controls > .gansar-select { display: none; }
       .graph-tree-active #trace { display: none; }
       .graph-mode-tabs #graphTreeMode { grid-column: 1 / -1; }
       .tg-topbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; flex: 0 0 auto; }
@@ -2353,6 +2354,8 @@
       let searchFocusId = "";
       let edgeFilterType = "";
       let edgeThreshold = 1;
+      let filteredEdgeIds = null;
+      let graphFilterNotice = "";
       let selected = null;
       let selectedEdge = null;
       let hoveredNode = null;
@@ -2645,7 +2648,8 @@
         return (negative ? "-" : "") + text;
       }
       function transactionGraphAddressKey(chain, address) {
-        return String(chain || "unknown") + ":" + String(address ? uiAddress(address) : "");
+        const value=String(address ? uiAddress(address) : "");
+        return String(chain || "unknown") + ":" + (/^0x[\da-f]{40}$/i.test(value)?value.toLowerCase():value);
       }
       function transactionGraphKnownNode(chain, address) {
         if (!address) return null;
@@ -2654,15 +2658,31 @@
           [node.address, node.service_address, node.title, node.id?.startsWith("wallet:" + chain + ":") ? node.id.slice(("wallet:" + chain + ":").length) : ""]
             .some(value => value && transactionGraphAddressKey(chain, value) === key)) || null;
       }
+      function walletEnsIdentity(chain, address) {
+        if (chain !== "eth" || !/^0x[\da-f]{40}$/i.test(String(address || ""))) return null;
+        const ens = integratedNftPayload.ens || {}, rows = [...(ens.wallet_identities || [])];
+        const matches = rows.filter(row=>row.chain === "eth" && row.forward_verified === true && row.provenance?.chain_id === 1 && row.source === "ethereum_ens" && typeof row.name === "string" && row.name.trim() && String(row.address || "").toLowerCase() === String(address).toLowerCase());
+        const names = new Set(matches.map(row=>row.name.toLowerCase()));
+        return names.size === 1 ? matches[0] : null;
+      }
+      function graphWalletAddress(node) {
+        return node?.address || node?.service_address || (String(node?.id || "").startsWith("wallet:eth:") ? node.id.slice(11) : /^0x[\da-f]{40}$/i.test(String(node?.title || "")) ? node.title : "");
+      }
+      function walletIdentityMarkup(chain, address) {
+        const identity = walletEnsIdentity(chain,address);
+        if (!identity) return "";
+        return `<section class="web3-context"><h4>${esc(identity.name)}</h4>${transactionGraphField("ENS resolution", "forward verified")}${transactionGraphField("Primary / reverse", identity.primary_verified === true ? "forward-confirmed primary" : "not established")}${transactionGraphField("Ethereum address", identity.address)}${transactionGraphField("Source / retrieved", [identity.source,identity.retrieved_at].filter(Boolean))}${web3Link(identity.source_url,"ENS source")}${transactionGraphRawDetails("ENS identity provenance",identity)}<p class="web3-note">${esc(transactionTreeText("Имя разрешается в адрес; это не доказательство личности человека или принадлежности бирже.","The name resolves to this address; this does not establish a person or exchange ownership."))}</p></section>`;
+      }
       function transactionGraphAddressNode(chain, address, id, x, y, targetNode = false) {
         const source = transactionGraphKnownNode(chain, address);
         const service = source && typeof graph3dServiceInfo === "function" ? graph3dServiceInfo(source) : null;
-        const display = address ? uiAddress(address) : "UNKNOWN";
+        const display = address ? uiAddress(address) : "UNKNOWN", identity = walletEnsIdentity(chain,address);
         return {id, kind: targetNode ? "target" : service ? "service" : "address", x, y,
           width: targetNode ? 176 : 160, height: targetNode ? 58 : 48,
           address: address || "", chain, sourceGraphNodeId: source?.id || "",
-          label: service?.name || shortValue(display, 10, 7),
-          sublabel: service?.status || (targetNode ? transactionGraphLabel("Цель", "Target") : chain),
+          label: service?.name || identity?.name || shortValue(display, 10, 7),
+          sublabel: service ? service.status + (identity ? " · " + identity.name : "") : identity ? shortValue(display,10,7) : (targetNode ? transactionGraphLabel("Цель", "Target") : chain),
+          ensIdentity: identity,
           role: targetNode ? "investigated_address" : service ? "existing_service_claim" : "counterparty",
           sourceKind: "account", recordIds: [], messageIds: [], accountIds: [],
           flow: "internal", serviceStatus: service?.status || "", logo: service?.logo || ""};
@@ -3900,6 +3920,7 @@
         else if (state.view === "records") state.projection = transactionGraphRecordsProjection(state.recordIds || [], {page: state.page, pageSize: 12, title: state.title});
         else state.projection = web3ProjectContext(transactionGraphBoundOverviewRoutes(transactionGraphOverviewProjection({limit: state.overviewLimit, recordIds: state.recordIds, focusAddress: state.isolate?.address || null})));
         if (state.isolate?.contextId) state.projection = transactionGraphContextProjection(state.projection, state.isolate);
+        if(state.isolate?.pathIds){const keep=new Set(state.isolate.pathIds);state.projection={...state.projection,nodes:state.projection.nodes.filter(node=>keep.has(node.id)),edges:state.projection.edges.filter(edge=>keep.has(edge.from)&&keep.has(edge.to))};}
         state.renderError = "";
         try {
           transactionGraphEngineeringLayout(state.projection, {cacheKey: state.view + ":" + state.recordId + ":" + (state.isolate?.address || "")});
@@ -3917,7 +3938,7 @@
         transactionGraphResize(); if (fitView && !state.renderError) transactionGraphFit(); else transactionGraphTransform();
         transactionGraphApplySelection();
         const counts = transactionTreeData().counts || {};
-        document.getElementById("transactionTreeCounts").textContent = `${transactionTreeText("Операций", "Operations")}: ${counts.financial_operations ?? 0} · ${transactionTreeText("наблюдений", "observations")}: ${counts.observations ?? 0}`;
+        document.getElementById("transactionTreeCounts").textContent = `${transactionTreeText("Операций", "Operations")}: ${counts.financial_operations ?? 0} · ${transactionTreeText("наблюдений", "observations")}: ${counts.observations ?? 0} · ${transactionTreeText("на сцене", "on scene")}: ${state.projection.nodes.length} / ${state.projection.edges.length}`;
         const breadcrumb = state.view === "detail" ? transactionTreeText("Исполнение операции", "Operation execution") + " · " + shortValue(transactionTreeData().records[state.recordId]?.operation_id || state.recordId, 14, 10) : state.view === "records" ? state.title || transactionTreeText("Выбор операции", "Select operation") : transactionTreeText("Основные маршруты", "Principal routes");
         document.getElementById("transactionGraphBreadcrumb").textContent = breadcrumb;
         document.getElementById("transactionGraphBack").disabled = !state.history.length;
@@ -4052,7 +4073,7 @@
         const title = node.label || transactionTreeCompact(address) || node.id;
         const monetary = node.kind === "aggregate" || node.kind === "operation" ? transactionTreeText("Агрегат/запись представления; не дополнительный перевод", "Presentation aggregate/record; not an additional transfer") : node.role || node.kind;
         const messageFields = node.sourceKind === "message" && source ? transactionGraphField("From", source.from ? transactionTreeAddress(source.from) : "UNKNOWN") + transactionGraphField("To", source.to ? transactionTreeAddress(source.to) : "UNKNOWN") + transactionGraphField(transactionTreeText("Тип сообщения", "Message type"), source.kind || source.message_type || "UNKNOWN") + transactionGraphField(transactionTreeText("Сумма сообщения", "Message amount"), source.amount_decimal == null ? null : transactionTreeAmount(source.amount_decimal, source.asset)) : "";
-        const serviceFields = transactionGraphServiceDetails(node, address) + web3WalletMarkup(address);
+        const serviceFields = transactionGraphServiceDetails(node, address) + walletIdentityMarkup(node.chain || accounts[0]?.chain,address) + web3WalletMarkup(address);
         const statusFields = transactionGraphField(transactionTreeText("Статус исполнения", "Execution status"), accounts.some(account => account.aborted === true) ? "ABORTED" : node.status && !["observed", "UNKNOWN"].includes(node.status) ? node.status : null) + transactionGraphField("Bounce", messages.some(message => message.bounced === true) ? "true" : null);
         inspector.innerHTML = `<div class="tg-inspector"><div class="tg-inspector-title"><b>${esc(title)}</b></div>${transactionGraphField(transactionTreeText("Адрес", "Address"), address ? transactionTreeAddress(address) : null)}${transactionGraphField(transactionTreeText("Роль", "Role"), monetary)}${serviceFields}${statusFields}${transactionGraphField("ID", source?.hash || node.sourceId || node.id)}${messageFields}${transactionGraphField(countLabel, `${inCount} / ${outCount}`)}${transactionGraphField(transactionTreeText("Связанные операции", "Related operations"), related.length)}${transactionGraphField(transactionTreeText("Активы", "Assets"), assets)}${transactionGraphField(transactionTreeText("Суммы отдельных записей", "Individual record amounts"), amounts.slice(0, 8))}${amounts.length > 8 ? `<div class="mono">${esc(transactionTreeText("Остальные суммы доступны через связанные операции.", "Further amounts remain available through related operations."))}</div>` : ""}${transactionGraphField(transactionTreeText("Источники", "Sources"), source?.sources || [])}${transactionGraphField(transactionTreeText("Время", "Time"), source?.time)}${transactionGraphInspectorActions(related)}${source ? transactionGraphRawDetails(transactionTreeText("Данные источника", "Source details"), source) : ""}${node.partial || source?.conflicts && Object.keys(source.conflicts).length ? `<div class="mono">${esc(transactionTreeText("Часть исполнения отсутствует либо имеет расхождения источников.", "Execution is partial or source observations conflict."))}</div>` : ""}</div>`;
       }
@@ -4135,6 +4156,15 @@
         else if (value.recordIds?.length) { state.view = "records"; state.recordIds = value.recordIds; state.title = value.label || ""; state.page = 0; }
         transactionGraphRender(true);
       }
+      function transactionGraphTraceSelected() {
+        const state=transactionGraphState, selection=state.selected, projection=state.projection;
+        if(!selection||!projection)return;
+        const edge=selection.kind==="edge"&&state.edgeById.get(selection.id),finish=edge?edge.to:selection.id;
+        const start=projection.nodes.find(node=>node.role==="investigated_address"||node.kind==="target")?.id;
+        const path=graphRoute(start,finish,projection.edges);
+        if(!path.length){document.getElementById("transactionGraphStatus").textContent=transactionTreeText("Путь по показанным связям не найден; недостающие связи не создаются.","No path through displayed relations; missing links are not invented.");return;}
+        transactionGraphPush();state.isolate={pathIds:path};transactionGraphRender(false);
+      }
       function transactionGraphHover(event, element) {
         const tip = document.getElementById("transactionGraphHover"), state = transactionGraphState;
         if (!tip || !element) { transactionGraphHideHover(); return; }
@@ -4153,7 +4183,7 @@
         if (state.searchIndex.has(id)) return state.searchIndex.get(id);
         const data = transactionTreeData(), record = data.records[id], row = transactionTreeRow(record) || {};
         const refs = [id, record?.operation_id, row.hash, row.from, row.to, row.counterparty, row.q, ...(record?.transaction_hashes || []), ...(record?.observation_ids || []), ...(record?.trace_ids || [])];
-        for (const address of [row.from, row.to, row.counterparty]) if (address) refs.push(uiAddress(address));
+        for (const address of [row.from, row.to, row.counterparty]) if (address) refs.push(uiAddress(address),walletEnsIdentity(row.chain_raw,address)?.name);
         const text = refs.filter(Boolean).join(" ").toLowerCase(); state.searchIndex.set(id, text); return text;
       }
       function transactionGraphComponentSearch(id) {
@@ -4175,7 +4205,7 @@
       function transactionGraphSearchMatch(value) {
         const state = transactionGraphState, q = state.query; if (!value || !q || value.uiOnly) return false;
         const refs = [value.id, value.sourceId, value.messageHash, ...(value.context ? [value.label, value.sublabel] : [])];
-        for (const address of [value.address, value.sourceAddress, value.targetAddress]) if (address) refs.push(address, transactionTreeAddress(address));
+        for (const address of [value.address, value.sourceAddress, value.targetAddress]) if (address) refs.push(address, transactionTreeAddress(address),walletEnsIdentity(value.chain,address)?.name);
         if (refs.filter(Boolean).some(ref => String(ref).toLowerCase().includes(q))) return true;
         if (value.sourceId && ["account", "message"].includes(value.sourceKind) && transactionGraphObjectSearch(value.sourceKind, value.sourceId).includes(q)) return true;
         return value.kind === "operation" && (value.recordIds || []).some(id => state.searchRecordIds.has(id));
@@ -4187,7 +4217,7 @@
         if (focus.contextId) value = projection.nodes.find(node => node.id === focus.contextId);
         else if (focus.sourceKind === "message") { value = projection.edges.find(edge => edge.sourceKind === "message" && edge.sourceId === focus.sourceId); kind = "edge"; }
         else if (focus.sourceKind === "account") value = projection.nodes.find(node => node.sourceKind === "account" && node.sourceId === focus.sourceId);
-        else if (focus.address) value = projection.nodes.find(node => node.address && transactionTreeAddress(node.address) === focus.address && !node.uiOnly);
+        else if (focus.address) value = projection.nodes.find(node => node.address && transactionGraphAddressKey(node.chain,node.address) === transactionGraphAddressKey(node.chain,focus.address) && !node.uiOnly);
         else value = projection.nodes.find(node => node.kind === "operation" && (node.recordIds || []).some(id => state.searchRecordIds.has(id)));
         if (!value) return;
         transactionGraphSelect(kind, value.id);
@@ -4216,7 +4246,10 @@
         }
         if (!state.query) transactionGraphPush();
         state.query = q;
-        if (web3Search(q)) return;
+        const ensWallets = (integratedNftPayload.ens?.wallet_identities || []).filter(row=>walletEnsIdentity(row.chain,row.address)?.name===row.name && row.name.toLowerCase().includes(q));
+        const primaryEns=integratedNftPayload.ens?.profile||{};
+        if (!ensWallets.length && walletEnsIdentity("eth",primaryEns.resolved_address)?.name?.toLowerCase().includes(q)) ensWallets.push(walletEnsIdentity("eth",primaryEns.resolved_address));
+        if (!ensWallets.length && web3Search(q)) return;
         const data = transactionTreeData();
         const matches = Object.keys(data.records || {}).filter(id => {
           const record = data.records[id];
@@ -4229,7 +4262,7 @@
         const partialAccounts = Object.entries(data.accounts || {}).filter(([id, value]) => [id, value.hash].filter(Boolean).some(ref => String(ref).toLowerCase().includes(q)));
         const messageMatch = exactMessage || (partialMessages.length === 1 ? partialMessages[0] : null), accountMatch = exactAccount || (partialAccounts.length === 1 ? partialAccounts[0] : null);
         const source = messageMatch ? {sourceKind: "message", sourceId: messageMatch[0]} : accountMatch ? {sourceKind: "account", sourceId: accountMatch[0]} : null;
-        const addresses = new Map();
+        const addresses = new Map(ensWallets.map(row=>[transactionTreeAddress(row.address),row.address]));
         for (const value of [...Object.values(data.accounts || {}), ...Object.values(data.messages || {})]) for (const address of [value.address, value.from, value.to]) {
           if (address && [address, transactionTreeAddress(address)].some(ref => String(ref).toLowerCase().includes(q))) addresses.set(transactionTreeAddress(address), address);
         }
@@ -4244,8 +4277,8 @@
           if (id) Object.assign(state, {view: "detail", recordId: id, expanded: new Set(), limits: new Map(), isolate: {...source}, searchFocus: source});
         } else if (addresses.size === 1) {
           const [display, address] = [...addresses][0];
-          const financial = matches.filter(id => data.records[id].view === "financial" && [transactionTreeRow(data.records[id])?.from, transactionTreeRow(data.records[id])?.to].some(value => value && transactionTreeAddress(value) === display));
-          if (financial.length) Object.assign(state, {view: "overview", recordIds: financial, isolate: {address}, searchFocus: {address: display}});
+          const financial = matches.filter(id => data.records[id].view === "financial" && [transactionTreeRow(data.records[id])?.from, transactionTreeRow(data.records[id])?.to].some(value => value && transactionGraphAddressKey("",value) === transactionGraphAddressKey("",address)));
+          if (financial.length || transactionGraphAddressKey("",data.target)===transactionGraphAddressKey("",address)) Object.assign(state, {view: "overview", recordIds: financial, isolate: {address}, searchFocus: {address: display}});
           else {
             const account = Object.entries(data.accounts || {}).find(([, value]) => value.address && transactionTreeAddress(value.address) === display);
             const message = account ? null : Object.entries(data.messages || {}).find(([, value]) => [value.from, value.to].some(ref => ref && transactionTreeAddress(ref) === display));
@@ -4383,13 +4416,20 @@
         // A selected real address always remains present with its direct
         // neighborhood on the active page. No links are invented for groups.
         const focus = selected?.id || searchFocusId;
-        if (focus && nodeById.has(focus)) {
+        if (focus && visibleIds.has(focus) && nodeById.has(focus)) {
           add(nodeById.get(focus));
           const candidates = visibleEdges.filter(edge => edge.from === focus || edge.to === focus)
             .sort((a,b) => Number(graph3dFinancialEdge(b)) - Number(graph3dFinancialEdge(a)) || graph3dLinkScore(b)-graph3dLinkScore(a));
           for (const edge of candidates.slice(0, 36)) { add(nodeById.get(edge.from)); add(nodeById.get(edge.to)); }
         }
-        const context = typeof web3ContextProjection === 'function' ? web3ContextProjection(target) : {nodes: [], edges: []};
+        let context = typeof web3ContextProjection === 'function' ? web3ContextProjection(target) : {nodes: [], edges: []};
+        const contextTarget = nodeById.get(target);
+        const contextPool = [...(contextTarget ? [contextTarget] : []), ...context.nodes.filter(node=>node.id!==target)];
+        const contextMode = graphInvestigationModeSelect?.value || 'all';
+        const contextResult = graphFilterScene(contextPool, context.edges, {mode:contextMode,target,focus:selected?.id||searchFocusId||target,
+          nodeType:nodeTypeSelect.value,edgeType:edgeTypeSelect.value,threshold:thresholdInput.value,hiddenGroups:hiddenLegendGroups,
+          searchIds:searchInput.value ? new Set(contextPool.filter(node=>normalizeSearch([node.label,node.sourceId,node.address].filter(Boolean).join(' ')).includes(normalizeSearch(searchInput.value))).map(node=>node.id)) : null});
+        context = {nodes:contextResult.nodes,edges:contextResult.edges};
         const contextNodes = context.nodes.filter(node => node.id !== target);
         const contextParents = new Map(context.edges.map(edge => [edge.to, edge.from]));
         const categoryNodes = contextNodes.filter(node => node.sourceKind === 'web3_category' || node.sourceKind === 'ens_name');
@@ -4447,6 +4487,7 @@
         const history = graph3dState.contextHistory || (graph3dState.contextHistory = []), camera = graph3dState.graph?.camera?.();
         history.push({expanded:new Set(transactionGraphState.expanded),limits:new Map(transactionGraphState.limits),query:transactionGraphState.query,queryInput:typeof searchInput === 'undefined' ? '' : searchInput.value,
           pages:new Map(graph3dState.groupPages || []),mode:graphInvestigationModeSelect?.value || 'all',isolate:graph3dState.contextIsolate || '',selected,selectedEdge,searchFocusId,
+          nodeType:nodeTypeSelect.value,edgeType:edgeTypeSelect.value,threshold:thresholdInput.value,hidden:new Set(hiddenLegendGroups),isolated:isolated&&new Set(isolated),depth:graphIsolationDepth,
           camera:camera?.position ? {x:camera.position.x,y:camera.position.y,z:camera.position.z} : null,target:graph3dCameraTargetPoint()});
         if (history.length > 40) history.shift();
       }
@@ -4461,7 +4502,8 @@
         if (graphInvestigationModeSelect) { graphInvestigationModeSelect.value = previous.mode; syncCustomSelect(graphInvestigationModeSelect); }
         if (typeof searchInput !== 'undefined') searchInput.value = previous.queryInput;
         selected = previous.selected; selectedEdge = previous.selectedEdge; searchFocusId = previous.searchFocusId;
-        refreshGraph3dData();
+        nodeTypeSelect.value=previous.nodeType||"";edgeTypeSelect.value=previous.edgeType||"";thresholdInput.value=previous.threshold||"1";hiddenLegendGroups=new Set(previous.hidden||[]);isolated=previous.isolated;graphIsolationDepth=previous.depth||1;syncCustomSelects();
+        applyFilters(false);
         if (previous.camera) graph3dState.graph.cameraPosition(previous.camera,previous.target,0);
         if (selected && !graph3dInspectPresentation(graph3dState.data?.nodes?.find(node => node.id === selected.id) || selected)) { inspectNode(selected); graph3dInspectorBackAction(); }
         else if (selectedEdge) { graph3dInspectLink(selectedEdge); graph3dInspectorBackAction(); }
@@ -4498,7 +4540,7 @@
       function graph3dWeb3SearchResults(query) {
         if (!graph3dState.active || !query) return [];
         const q = String(query).toLowerCase(), result = [], ens = integratedNftPayload.ens || {}, profile = ens.profile || {}, name = profile.name || ens.ens_name;
-        if (name && [name,profile.resolved_address,...(ens.record_views || []).flatMap(row => [row.key,row.display,row.title])].some(value => String(value || '').toLowerCase().includes(q))) {
+        if (name && !walletEnsIdentity("eth",profile.resolved_address || ens.resolved_address) && [name,profile.resolved_address,...(ens.record_views || []).flatMap(row => [row.key,row.display,row.title])].some(value => String(value || '').toLowerCase().includes(q))) {
           result.push({node:{id:'web3:ens:'+name,kind:'ens',label:name,sourceKind:'ens_name',sourceId:name,context:true,__g3d_web3:true},score:1000});
         }
         for (const asset of web3Assets().values()) {
@@ -4780,6 +4822,7 @@
           {key: "nft", label: "NFT", color: "#f2bd4b"},
           {key: "gift", label: "Gift", color: "#ff6b5c"},
           {key: "jetton", label: "Jetton", color: "#8ee35f"},
+          {key: "token", label: "Token", color: "#8ee35f"},
           {key: "telegram", label: "Telegram", color: "#42b8ff"},
           {key: "marketplace", label: "Marketplace", color: "#ff9b3d"},
           {key: "transaction", label: "Transaction", color: "#8c98a1"},
@@ -4791,8 +4834,9 @@
         if (transactionKinds().has(kind)) return "transaction";
         if (kind === "gift") return "gift";
         if (kind === "nft" || kind === "bsc_nft" || kind === "solana_nft" || kind === "collectible" || kind === "domain") return "nft";
-        if (kind === "username" || kind === "telegram_username" || kind === "telegram_id" || kind === "telegram_channel" || kind === "telegram_group" || kind === "ens_identity") return "telegram";
-        if (tokenKinds().has(kind)) return "jetton";
+        if (kind === "username" || kind === "telegram_username" || kind === "telegram_id" || kind === "telegram_channel" || kind === "telegram_group") return "telegram";
+        if (graphCategoryMatches(node,"jetton")) return "jetton";
+        if (tokenKinds().has(kind)) return "token";
         if (kind === "marketplace" || kind === "exchange" || kind === "doge_exchange_label" || kind === "tron_exchange" || kind === "sunswap_pool") return "marketplace";
         if (walletKinds().has(kind)) return "wallet";
         if (kind === "service" || kind === "contract" || kind === "eth_contract" || kind === "bsc_contract" || kind === "tron_contract" || kind === "solana_program" || kind === "dex_pair" || kind === "dex_router" || kind === "bridge" || kind === "risk_source" || kind === "ens_record" || kind === "activity" || kind === "tron_defi" || kind === "tron_resource" || kind === "tron_permission") return "contract";
@@ -4801,50 +4845,83 @@
       function graphGroupLabel(key) {
         return graphLegendGroups().find(item => item.key === key)?.label || key;
       }
+      function graphCategoryMatches(node, category) {
+        const kind = String(node?.kind || ""), asset = node?.asset || {};
+        if (category === "nft") return ["nft", "bsc_nft", "solana_nft", "nft_collection", "collectible", "domain", "gift", "telegram_collectible_username", "ton_domain_nft", "telegram_gift"].includes(kind) || node?.sourceKind === "nft_item";
+        if (category === "gift") return ["gift", "telegram_gift"].includes(kind) || node?.sourceKind === "nft_item" && asset.kind === "gift";
+        if (category === "telegram") return ["username", "telegram_username", "telegram_collectible_username", "telegram_gift", "telegram_id", "telegram_channel", "telegram_group", "username_owner", "gift"].includes(kind);
+        if (category === "jetton") return ["jetton", "jetton_transfer", "jetton_counterparty"].includes(kind) && (!node.chain || node.chain === "ton");
+        if (category === "marketplace") return kind === "marketplace" || (node?.marketplace_claims || []).some(claim => ["CONFIRMED", "PROBABLE", "POSSIBLE"].includes(claim.status));
+        return false;
+      }
+      function graphComparableUsd(edge) {
+        if (!graph3dFinancialEdge(edge)) return null;
+        for (const field of ["amount_usd", "value_usd", "usd_value", "total_usd"]) {
+          const value = edge?.[field];
+          if (value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value)) && Number(value) > 0) return Number(value);
+        }
+        return null;
+      }
       function importantEdge(edge) {
-        return Number(edge?.relationship_rank || 0) >= 8
-          || Number(edge?.importance || 0) >= 10
-          || Number(edge?.weight || 0) >= 4
-          || Number(edge?.count || 1) >= 3
-          || Number(edge?.total || 0) > 0;
+        // Raw ETH, stablecoin and token quantities are not comparable values.
+        if(importantEdge.source!==edges){const values=edges.map(graphComparableUsd).filter(value=>value!==null).sort((a,b)=>a-b);importantEdge.source=edges;importantEdge.cutoff=values[Math.ceil(values.length*.75)-1];}
+        const value = graphComparableUsd(edge);
+        return value !== null && Number.isFinite(importantEdge.cutoff) && value >= importantEdge.cutoff;
+      }
+      function graphRoute(start, finish, relations) {
+        if (!start || !finish) return [];
+        const previous = new Map([[start, null]]), queue = [start], adjacency = new Map();
+        for (const edge of relations) {
+          if (!adjacency.has(edge.from)) adjacency.set(edge.from, []);
+          if (!adjacency.has(edge.to)) adjacency.set(edge.to, []);
+          adjacency.get(edge.from).push(edge.to); adjacency.get(edge.to).push(edge.from);
+        }
+        for (let i=0;i<queue.length;i++) {
+          const id = queue[i]; if (id === finish) { const path=[]; for(let p=id;p!==null;p=previous.get(p))path.push(p); return path.reverse(); }
+          for (const next of adjacency.get(id) || []) if (!previous.has(next)) { previous.set(next,id); queue.push(next); }
+        }
+        return [];
+      }
+      function graphFilterScene(sourceNodes, sourceEdges, options = {}) {
+        const known = new Map(sourceNodes.map(node => [node.id,node])), mode = options.mode || "all";
+        const allowed = new Set(sourceNodes.filter(node => (!options.nodeType || node.kind === options.nodeType) && !(options.hiddenGroups || new Set()).has(graphLegendKey(node))).map(node=>node.id));
+        let relations = sourceEdges.filter(edge => allowed.has(edge.from) && allowed.has(edge.to) && (!options.edgeType || edge.type === options.edgeType) && Number(edge.count || 1) >= Number(options.threshold || 1));
+        let ids = new Set(allowed), path = [], notice = "";
+        const keepEndpoints = rows => new Set(rows.flatMap(edge => [edge.from,edge.to]));
+        if (["nft","gift","jetton","telegram","marketplace"].includes(mode)) {
+          const matched = new Set([...allowed].filter(id=>graphCategoryMatches(known.get(id),mode)));
+          relations = relations.filter(edge=>matched.has(edge.from)||matched.has(edge.to));
+          ids = new Set([...matched,...keepEndpoints(relations)]);
+        } else if (mode === "direct") {
+          relations = relations.filter(edge=>edge.from===options.target||edge.to===options.target);
+          ids = keepEndpoints(relations);
+          if (allowed.has(options.target)) ids.add(options.target);
+        } else if (mode === "major") {
+          const values=relations.map(graphComparableUsd).filter(value=>value!==null).sort((a,b)=>a-b), cutoff=values[Math.ceil(values.length*.75)-1];
+          relations=relations.filter(edge=>graphComparableUsd(edge)!==null&&graphComparableUsd(edge)>=cutoff); ids=keepEndpoints(relations);
+          if (!values.length) notice="major_unavailable";
+        } else if (mode === "path") {
+          path = allowed.has(options.target)&&allowed.has(options.focus)?graphRoute(options.target,options.focus,relations):[];
+          ids=new Set(path); const pairs=new Set(path.slice(1).flatMap((id,index)=>[JSON.stringify([path[index],id]),JSON.stringify([id,path[index]])]));
+          relations=relations.filter(edge=>pairs.has(JSON.stringify([edge.from,edge.to])));
+          if (!path.length) notice="no_path";
+        } else if (mode === "isolate") {
+          ids=new Set(allowed.has(options.focus)?[options.focus]:[]); let frontier=new Set(ids);
+          for(let depth=0;depth<Math.max(1,Number(options.depth||1));depth++) {const next=new Set();for(const edge of relations){if(frontier.has(edge.from)&&!ids.has(edge.to))next.add(edge.to);if(frontier.has(edge.to)&&!ids.has(edge.from))next.add(edge.from);}for(const id of next)ids.add(id);frontier=next;}
+        }
+        if (options.isolateIds) ids=new Set([...ids].filter(id=>options.isolateIds.has(id)));
+        if (options.searchIds) ids=new Set([...ids].filter(id=>options.searchIds.has(id)));
+        relations=relations.filter(edge=>ids.has(edge.from)&&ids.has(edge.to));
+        if (!ids.size && !notice) notice="empty";
+        return {nodes:sourceNodes.filter(node=>ids.has(node.id)),edges:relations,ids,path,notice};
       }
       function idsForLegendKey(key) {
-        const matched = new Set(nodes.filter(node => graphLegendKey(node) === key).map(node => node.id));
-        const ids = new Set([target, ...matched]);
-        for (const edge of edges) {
-          if (matched.has(edge.from) || matched.has(edge.to)) {
-            ids.add(edge.from);
-            ids.add(edge.to);
-          }
-        }
-        return ids;
+        return graphFilterScene(nodes,edges,{mode:key}).ids;
       }
       function graphModeBaseIds(modeValue) {
-        const allIds = new Set(nodes.map(node => node.id));
-        pathIds = new Set();
-        if (modeValue === "direct") return neighbors(target, 1);
-        if (modeValue === "nft") return idsForLegendKey("nft");
-        if (modeValue === "gift") return idsForLegendKey("gift");
-        if (modeValue === "jetton") return idsForLegendKey("jetton");
-        if (modeValue === "telegram") return idsForLegendKey("telegram");
-        if (modeValue === "marketplace") return idsForLegendKey("marketplace");
-        if (modeValue === "major") {
-          const ids = new Set([target]);
-          for (const edge of edges) if (importantEdge(edge)) { ids.add(edge.from); ids.add(edge.to); }
-          return ids;
-        }
-        if (modeValue === "path") {
-          const focusId = selected?.id || searchFocusId || target;
-          const path = shortestPath(focusId);
-          pathIds = edgePath(path);
-          return new Set(path);
-        }
-        if (modeValue === "isolate" && graph3dState.active && graph3dState.contextIsolate) return allIds;
-        if (modeValue === "isolate") {
-          const focusId = selected?.id || searchFocusId || target;
-          return neighbors(focusId, graphIsolationDepth);
-        }
-        return allIds;
+        const scene=graphFilterScene(nodes,edges,{mode:modeValue,target,focus:selected?.id||searchFocusId||target,
+          nodeType:nodeTypeSelect.value,edgeType:edgeTypeSelect.value,threshold:thresholdInput.value,hiddenGroups:hiddenLegendGroups,depth:graphIsolationDepth});
+        pathIds=new Set(modeValue==="path"?scene.edges.map(edge=>edge.id):[]);return scene.ids;
       }
       function graphModeTitle(modeValue) {
         const map = {
@@ -4855,7 +4932,7 @@
           jetton: "Jettons",
           telegram: "Telegram",
           marketplace: "Marketplaces",
-          major: uiLabel("Крупные связи", "Major links"),
+          major: uiLabel("Крупные связи · USD, верхний квартиль", "Major links · USD, upper quartile"),
           path: uiLabel("Путь", "Path"),
           isolate: uiLabel("Изоляция", "Isolation"),
         };
@@ -4873,7 +4950,7 @@
           syncCustomSelect(graphInvestigationModeSelect);
         }
         graph3dState.contextIsolate = '';
-        if (value !== "all") clearGraphSearch();
+        // Search and entity/link filters remain independent restrictions.
         graphIsolationDepth = depth;
         isolated = null;
         applyFilters();
@@ -5512,7 +5589,7 @@
             }
           }
           positions.set(node.id,point); occupied.push({...point,radius});
-          return {...node,id:String(node.id),name:node.label||shortNodeLabel(node),group:node.kind||'unknown',type:node.kind||'unknown',cluster_group:graph3dClusterKind(node),
+          return {...node,id:String(node.id),name:node.__g3d_web3||node.__g3d_group?node.label:shortNodeLabel(node),group:node.kind||'unknown',type:node.kind||'unknown',cluster_group:graph3dClusterKind(node),
             x:point.x,y:point.y,z:point.z,fx:point.x,fy:point.y,fz:point.z,vx:0,vy:0,vz:0,z_seed:point.z,__gansar_index:index,
             value:Math.max(4,Math.min(18,Number(node.weight||4)+Math.log1p(degree.get(node.id)||0))),color:graph3dNodeTypeColor(node)};
         });
@@ -6117,7 +6194,7 @@
         if (!graph3dState.graph || !graph3dState.active) return;
         const fixed = [...graph3dState.fixedPositions].map(([id, point]) => [id, point.x, point.y, point.z]).sort((a, b) => String(a[0]).localeCompare(String(b[0])));
         const signature = JSON.stringify([visibleNodes.map(node => node.id), visibleEdges.map(edge => edge.id), fixed,
-          [...(graph3dState.groupPages || [])], [...transactionGraphState.expanded].sort(), [...transactionGraphState.limits], transactionGraphState.query || '', selected?.id || searchFocusId || '', graph3dState.contextIsolate || '']);
+          [...(graph3dState.groupPages || [])], [...transactionGraphState.expanded].sort(), [...transactionGraphState.limits], transactionGraphState.query || '', selected?.id || searchFocusId || '', graph3dState.contextIsolate || '', graphInvestigationModeSelect.value,nodeTypeSelect.value,edgeTypeSelect.value,thresholdInput.value,[...hiddenLegendGroups].sort()]);
         // A mode switch keeps the same immutable report/filter/fixed positions.
         // Reuse the existing payload, meshes and materials instead of asking the
         // vendor to remove and recreate every object on each 2D/3D return.
@@ -6377,7 +6454,7 @@
           if (nextMode === "tree") {
             shell.classList.add("mode-tree"); graphLayout.classList.add("graph-tree-active");
             transactionTreeActivate(); syncGraphModeButtons();
-          } else { resize(); fit(); }
+          } else { applyFilters(false); resize(); fit(); }
           storageSet("gansar_graph_mode", nextMode === "tree" ? "tree" : "2d");
           return;
         }
@@ -6395,7 +6472,7 @@
           graphLayout.classList.add("graph-3d-active");
           syncGraphModeButtons();
           resizeGraph3d();
-          refreshGraph3dData();
+          applyFilters(false);
           graph3dStartAtmosphereLoop();
           syncGraph3dDebugDom();
           storageSet("gansar_graph_mode", "3d");
@@ -6614,13 +6691,13 @@
       function graph2dActive() { return !graph3dState.active && !transactionTreeState.active; }
       function graph2dPush() {
         if (!graph2dActive()) return;
-        graph2dState.history.push({pages:new Map(graph2dState.pages),all:new Set(graph2dState.all),positions:new Map([...graph2dState.positions].map(([k,v])=>[k,{...v}])),selected,selectedEdge,searchFocusId,pathIds:new Set(pathIds),isolated:isolated&&new Set(isolated),visibleIds:new Set(visibleIds),hidden:new Set(hiddenLegendGroups),mode:graphInvestigationModeSelect?.value||'all',nodeType:nodeTypeSelect.value,edgeType:edgeTypeSelect.value,threshold:thresholdInput.value,query:searchInput.value,scale,ox,oy});
+        graph2dState.history.push({pages:new Map(graph2dState.pages),all:new Set(graph2dState.all),positions:new Map([...graph2dState.positions].map(([k,v])=>[k,{...v}])),selected,selectedEdge,searchFocusId,pathIds:new Set(pathIds),isolated:isolated&&new Set(isolated),visibleIds:new Set(visibleIds),filteredEdges:filteredEdgeIds&&new Set(filteredEdgeIds),hidden:new Set(hiddenLegendGroups),mode:graphInvestigationModeSelect?.value||'all',nodeType:nodeTypeSelect.value,edgeType:edgeTypeSelect.value,threshold:thresholdInput.value,query:searchInput.value,scale,ox,oy});
         if(graph2dState.history.length>40)graph2dState.history.shift();
       }
       function graph2dBack() {
         const s=graph2dState.history.pop();if(!s)return;
         graph2dState.pages=new Map(s.pages);graph2dState.all=new Set(s.all);graph2dState.positions=new Map(s.positions);selected=s.selected;selectedEdge=s.selectedEdge;searchFocusId=s.searchFocusId;pathIds=new Set(s.pathIds);isolated=s.isolated;hiddenLegendGroups=new Set(s.hidden);
-        if(graphInvestigationModeSelect)graphInvestigationModeSelect.value=s.mode;nodeTypeSelect.value=s.nodeType;edgeTypeSelect.value=s.edgeType;thresholdInput.value=s.threshold;searchInput.value=s.query;visibleIds=new Set(s.visibleIds);edgeFilterType=s.edgeType;edgeThreshold=Number(s.threshold);syncCustomSelects();refreshActive();scale=s.scale;ox=s.ox;oy=s.oy;graph2dState.signature='';draw();graph2dState.explicitFilterPush=false;graph2dFilterAfter();
+        if(graphInvestigationModeSelect)graphInvestigationModeSelect.value=s.mode;nodeTypeSelect.value=s.nodeType;edgeTypeSelect.value=s.edgeType;thresholdInput.value=s.threshold;searchInput.value=s.query;visibleIds=new Set(s.visibleIds);filteredEdgeIds=s.filteredEdges;edgeFilterType=s.edgeType;edgeThreshold=Number(s.threshold);syncCustomSelects();refreshActive();scale=s.scale;ox=s.ox;oy=s.oy;graph2dState.signature='';draw();renderGraphSummary();renderGraphLegend();count.textContent=`${visibleNodes.length} / ${nodes.length}`;mode.textContent=graphModeTitle(s.mode);graph2dState.explicitFilterPush=false;graph2dFilterAfter();
         if(selected)inspectNode(graph2dProjection().nodes.find(n=>n.id===selected.id)||selected);else if(selectedEdge)inspectEdge(selectedEdge);else inspector.innerHTML='';
       }
       function graph2dLane(node,topology) {
@@ -6728,7 +6805,7 @@
         if(index.views.has(cacheKey))return index.views.get(cacheKey);
         const clean=value=>{const result=String(value??'').trim();return /^(?:unknown|null|none|undefined|n\/a|-)$/i.test(result)?'':result;};
         const raw=source.raw&&typeof source.raw==='object'?source.raw:{},kind=String(source.kind||''),id=String(source.id||'');
-        const address=clean(source.address||source.service_address||source.contract)||graph2dEntityKey(id),wallet=['wallet','address','ton_address','bitcoin_wallet','ethereum_wallet','bsc_wallet','doge_wallet','doge_counterparty','trx_wallet','tron_wallet','solana_wallet','username_owner','jetton_counterparty','migration_target','cluster'].includes(kind);
+        const address=clean(source.address||source.service_address||source.contract||graphWalletAddress(source))||graph2dEntityKey(id),wallet=['wallet','address','ton_address','bitcoin_wallet','ethereum_wallet','bsc_wallet','doge_wallet','doge_counterparty','trx_wallet','tron_wallet','solana_wallet','username_owner','jetton_counterparty','migration_target','cluster'].includes(kind);
         const role=!wallet&&(id.startsWith('asset:ton:')||id.startsWith('web3:nft:')||['nft_item','nft_metadata'].includes(source.sourceKind)||['nft','gift','domain','collectible','bsc_nft','solana_nft','telegram_collectible_username','telegram_gift','ton_domain_nft'].includes(kind));
         const find=(map,values)=>{const found=new Set();for(const value of values){for(const key of [graph2dEntityKey(value),uiAddress(graph2dEntityKey(value))])for(const row of map.get(key)||[])found.add(row);}return found.size===1?[...found][0]:null;};
         const asset=role?find(index.assets,[source.address,source.sourceId,id,raw.address,raw.asset_id]):null;
@@ -6751,7 +6828,8 @@
         if(entityType==='ens'&&actualEns)fullName=ensName;
         if(entityType==='service'&&service?.name)fullName=service.name;
         const isAddress=value=>/^(?:[EU]Q[\w-]{46}|-?\d+:[a-f\d]{64}|0x[a-f\d]{40})$/i.test(value);
-        if(wallet&&entityType!=='service')fullName=uiAddress(address);
+        const walletIdentity=wallet?walletEnsIdentity(source.chain,address):null;
+        if(wallet&&entityType!=='service')fullName=walletIdentity?.name||uiAddress(address);
         if(!fullName||isAddress(fullName))fullName=uiAddress(address)||id;
         const media=value=>typeof web3Media==='function'?web3Media(value):'';
         let imageUrl=asset?media(asset.thumbnail_url)||media(asset.image_url):collection?media(collection.thumbnail_url)||media(collection.image_url):media(source.imageUrl)||nodeImageUrl(source);
@@ -6787,7 +6865,7 @@
           if(list.length>slice.length||page>=0||all){add(group);groupNodes.push(group);}
         }
         const focus=selected?.__g2d_group?'':selected?.id||searchFocusId;
-        if(focus&&nodeById.has(focus)){add(nodeById.get(focus));const direct=visibleEdges.filter(e=>e.from===focus||e.to===focus).sort((a,b)=>Number(graph3dFinancialEdge(b))-Number(graph3dFinancialEdge(a))||String(a.id).localeCompare(String(b.id)));for(const e of direct.slice(0,12)){add(nodeById.get(e.from));add(nodeById.get(e.to));}}
+        if(focus&&visibleIds.has(focus)&&nodeById.has(focus)){add(nodeById.get(focus));const direct=visibleEdges.filter(e=>e.from===focus||e.to===focus).sort((a,b)=>Number(graph3dFinancialEdge(b))-Number(graph3dFinancialEdge(a))||String(a.id).localeCompare(String(b.id)));for(const e of direct.slice(0,12)){add(nodeById.get(e.from));add(nodeById.get(e.to));}}
         const selectedRefs=new Set([...(selectedEdge?.__g2d_edges||[]),selectedEdge?.id,...pathIds].filter(Boolean));
         for(const edge of visibleEdges)if(selectedRefs.has(edge.id)){add(nodeById.get(edge.from));add(nodeById.get(edge.to));}
         const representative=id=>shown.has(id)?id:shown.has('g2d:group:'+memberships.get(id))?'g2d:group:'+memberships.get(id):null;
@@ -6847,7 +6925,7 @@
         const key=normalizeSearch(query);if(!key)return[];
         const results=[];
         for(const node of nodes){
-          const view=graph2dEntityPresentation(node),ensName=view.ens?.profile?.name||view.ens?.ens_name||'';
+          const view=graph2dEntityPresentation(node),ensName=walletEnsIdentity(node.chain,graphWalletAddress(node))?.name||(['ens','web3_identity'].includes(view.entityType)?view.fullName:'');
           const names=[view.displayName,view.itemAddress,ensName].filter(Boolean).map(normalizeSearch);
           if(names.some(name=>name.includes(key)))results.push({node,score:names.includes(key)?1050:700});
         }
@@ -6939,6 +7017,7 @@
         const rows=[cardRow(uiLabel('Тип','Type'),view.typeLabel),cardRow(uiLabel('Полный адрес / ID','Full address / ID'),primary,true,primary),cardRow('Node ID',view.id,true,view.id),cardRow(uiLabel('Сеть','Network'),node.chain),cardRow(uiLabel('Коллекция','Collection'),view.collectionName||view.collectionAddress,true,view.collectionAddress),cardRow(uiLabel('Статус владения','Ownership status'),view.ownershipLabel),cardRow(uiLabel('Наблюдаемый owner','Observed owner'),view.currentOwner,true,view.currentOwner),cardRow(uiLabel('Связей','Links'),String(stats.total)),cardRow(uiLabel('Evidence IDs','Evidence IDs'),view.evidenceIds.join(', '))];
         inspector.innerHTML=`<div class="node-card rich"><div class="node-card-head">${visual}<div><div class="node-card-title">${esc(view.displayName)}</div><div class="node-card-type">${esc(view.typeLabel)}</div></div></div>${view.classificationNote?`<p class="card-summary">${esc(view.classificationNote)}</p>`:''}${renderNodeActions(node,{primary,evidenceUrl:view.evidenceUrl})}${rows.filter(Boolean).join('')}${renderSourceSection(view.sources)}</div>`;
         if(view.asset)inspector.insertAdjacentHTML('beforeend',web3AssetMarkup(view.asset));
+        inspector.insertAdjacentHTML('beforeend',walletIdentityMarkup(node.chain,graphWalletAddress(node)));
         if(view.ens)inspector.insertAdjacentHTML('beforeend',`<section class="web3-context"><h4>${esc(uiLabel('Отдельная связанная ENS identity','Separate related ENS identity'))}</h4><p class="web3-note">${esc(uiLabel('Разрешение имени в адрес не меняет тип кошелька и не устанавливает личность человека.','Name resolution does not change the wallet type or identify a person.'))}</p>${web3EnsMarkup()}</section>`);
         if(typeof inferenceGraphMarkup==='function')inspector.insertAdjacentHTML('beforeend',inferenceGraphMarkup(node));
         return true;
@@ -6978,7 +7057,7 @@
       function activeNodes() { return graph2dActive()?graph2dProjection().nodes:visibleNodes; }
       function activeEdges() { return graph2dActive()?graph2dProjection().edges:visibleEdges; }
       function passEdge(edge) {
-        return (!edgeFilterType || edge.type === edgeFilterType) && Number(edge.count || 1) >= edgeThreshold;
+        return (!filteredEdgeIds || filteredEdgeIds.has(edge.id)) && (!edgeFilterType || edge.type === edgeFilterType) && Number(edge.count || 1) >= edgeThreshold;
       }
       function renderGraphSummary() {
         if (!graphSummary) return;
@@ -7023,41 +7102,27 @@
         }).join("");
       }
       function applyFilters(updateResults = true) {
+        if(transactionTreeState.active)return;
         graph2dFilterBefore();
-        const query = normalizeSearch(searchInput.value);
-        const nodeType = nodeTypeSelect.value;
-        const modeValue = graphInvestigationModeSelect?.value || "all";
-        edgeFilterType = edgeTypeSelect.value;
-        edgeThreshold = Number(thresholdInput.value || 1);
-        const results = query ? searchResultsForQuery(query, nodes.length) : [];
-        const contextQuery = query && graph3dState.active && graph3dWeb3SearchResults(query).length;
+        const query = normalizeSearch(searchInput.value), modeValue = graphInvestigationModeSelect?.value || "all";
+        edgeFilterType = edgeTypeSelect.value; edgeThreshold = Number(thresholdInput.value || 1);
+        const results = query ? searchResultsForQuery(query, nodes.length) : [], searchIds = query ? new Set(results.map(result=>result.node.id)) : null;
+        if (searchFocusId && searchIds?.has(searchFocusId)) for (const id of neighbors(searchFocusId,1)) searchIds.add(id);
         if (graph3dState.active) transactionGraphState.query = query;
-        const searchIds = query && !contextQuery ? new Set(results.map(result => result.node.id)) : null;
-        const contextIds = new Set();
-        if (searchFocusId && nodeById.has(searchFocusId)) for (const id of neighbors(searchFocusId, 1)) contextIds.add(id);
-        const modeIds = graphModeBaseIds(modeValue);
-        const scopedSearchIds = new Set(modeIds);
-        if (searchIds) {
-          for (const id of searchIds) scopedSearchIds.add(id);
-          for (const id of contextIds) scopedSearchIds.add(id);
-        }
-        const base = isolated || (query ? scopedSearchIds : modeIds);
-        visibleIds = new Set(nodes.filter(node => {
-          const matched = !searchIds || searchIds.has(node.id) || contextIds.has(node.id);
-          const legendVisible = node.id === target || !hiddenLegendGroups.has(graphLegendKey(node));
-          return base.has(node.id) && matched && legendVisible && (!nodeType || node.kind === nodeType);
-        }).map(node => node.id));
+        const scene = graphFilterScene(nodes,edges,{mode:modeValue,target,focus:selected?.id||searchFocusId||target,
+          nodeType:nodeTypeSelect.value,edgeType:edgeFilterType,threshold:edgeThreshold,hiddenGroups:hiddenLegendGroups,
+          isolateIds:isolated,searchIds,depth:graphIsolationDepth});
+        visibleIds=scene.ids;filteredEdgeIds=new Set(scene.edges.map(edge=>edge.id));pathIds=new Set(scene.path.length?scene.edges.map(edge=>edge.id):[]);graphFilterNotice=scene.notice;
         refreshActive();
-        count.textContent = `${visibleNodes.length} / ${nodes.length}`;
-        mode.textContent = modeValue === "path" && pathIds.size ? `${graphModeTitle(modeValue)} ${Math.max(0, pathIds.size)} ${text("hops")}` : graphModeTitle(modeValue);
-        renderGraphSummary();
-        renderGraphLegend();
-        if (updateResults) renderSearchResults(query, results.slice(0, 12));
-        simulationHeat = 0;
-        graph2dState.signature = "";
-        draw();
-        refreshGraph3dData();
-        graph2dFilterAfter();
+        count.textContent=`${visibleNodes.length} / ${nodes.length}`;
+        mode.textContent=graphModeTitle(modeValue)+(scene.path.length?` · ${scene.path.length-1} ${text("hops")}`:"");
+        const messages={empty:uiLabel("Нет объектов, соответствующих фильтрам","No objects match the active filters"),no_path:uiLabel("Путь по допустимым связям не найден","No path through the allowed relations"),major_unavailable:uiLabel("Нет сопоставимой стоимости USD для крупных связей","No comparable USD values for major links")};
+        if(scene.notice)mode.textContent+=" · "+messages[scene.notice];
+        if(selected&&!visibleIds.has(selected.id)&&!selected.__g3d_web3&&!selected.__g2d_group){selected=null;selectedEdge=null;inspector.innerHTML=`<p class="web3-note">${esc(uiLabel("Выбранный объект скрыт фильтрами. Исходные данные сохранены.","The selected object is hidden by the filters. Source data is retained."))}</p>`;}
+        if(selectedEdge&&!scene.edges.some(edge=>edge.id===selectedEdge.id||(selectedEdge.__g2d_edges||selectedEdge.__g3d_edges||[]).includes(edge.id))){selectedEdge=null;inspector.innerHTML="";}
+        hoveredNode=null;hoveredEdge=null;tip.style.display="none";
+        renderGraphSummary();renderGraphLegend();if(updateResults)renderSearchResults(query,results.slice(0,12));
+        simulationHeat=0;graph2dState.signature="";draw();refreshGraph3dData();graph2dFilterAfter();
       }
       function seed() { graph2dState.positions.clear();graph2dState.signature='';simulationHeat=0;graph2dProjection();fit(); }
       function nodeRadius(node) { return node._r||12; }
@@ -7259,6 +7324,7 @@
       function buildSearchEntry(node) {
         const values = searchFieldValues(node);
         values.push(shortNodeLabel(node), graphNodeLabel(node.kind), nodeEntityLabel(node), sourceText(node));
+        const identity=walletEnsIdentity(node.chain,graphWalletAddress(node)); if(identity)values.push(identity.name,identity.address);
         if (node.id === target && reportTargetAddress) values.push(reportTargetAddress);
         const raw = Array.from(new Set(values.filter(Boolean).map(item => String(item))));
         const normalizedParts = raw.map(normalizeSearch).filter(Boolean);
@@ -7306,8 +7372,7 @@
           .filter(entry => searchEntryMatches(entry, normalized))
           .map(entry => ({entry, node: entry.node, score: searchEntryScore(entry, normalized)}))
           .sort((a, b) => b.score - a.score || String(a.node.label || a.node.id).localeCompare(String(b.node.label || b.node.id)));
-        if(!graph2dActive())return [...graph3dWeb3SearchResults(normalized),...found].sort((a,b)=>b.score-a.score).slice(0,limit);
-        const additions=graph2dEntitySearch(normalized);
+        const additions=[...graph2dEntitySearch(normalized),...graph3dWeb3SearchResults(normalized)];
         const unique=new Map();for(const result of [...additions,...found].sort((a,b)=>b.score-a.score))if(!unique.has(result.node.id))unique.set(result.node.id,result);
         return [...unique.values()].slice(0,limit);
       }
@@ -7407,6 +7472,8 @@
       }
       function shortNodeLabel(node) {
         if (!node) return "-";
+        const identity=walletEnsIdentity(node.chain,graphWalletAddress(node));
+        if(identity){const service=typeof graph3dServiceInfo==="function"?graph3dServiceInfo(node):null;return shortValue(service?.name||identity.name,22,7);}
         if (node.chain === "ton") {
           const wallet = ["wallet", "cluster", "migration_target", "username_owner", "jetton_counterparty", "contract"].includes(node.kind);
           const full = firstCardValue(node, wallet ? ["display_address", "address", "service_address", "contract", "wallet", "id", "title", "label"] : ["address", "contract", "wallet", "title", "label", "id"]);
@@ -7669,6 +7736,7 @@
           <div class="card-section"><div class="card-section-title">${esc(uiLabel("Источники", "Sources"))}</div>${renderSourceSection(summary.sources)}</div>
           ${cardSection(uiLabel("Доказательства", "Evidence"), [cardLinkRow(uiLabel("Источник", "Source"), text("open"), summary.evidenceUrl)])}
           ${node.service_key ? serviceEvidenceMarkup(node.service_key, uiLabel("Сервисная атрибуция", "Service attribution")) : ""}
+          ${walletIdentityMarkup(node.chain,graphWalletAddress(node))}
         </div>`;
       }
       function buildEdgeSummary(edge) {
@@ -7722,18 +7790,7 @@
         return set;
       }
       function shortestPath(id) {
-        const queue = [[target]];
-        const seen = new Set([target]);
-        while (queue.length) {
-          const path = queue.shift();
-          const last = path[path.length - 1];
-          if (last === id) return path;
-          for (const edge of edges) {
-            const next = edge.from === last ? edge.to : edge.to === last ? edge.from : null;
-            if (next && !seen.has(next)) { seen.add(next); queue.push([...path, next]); }
-          }
-        }
-        return [id];
+        return graphRoute(target,id,edges.filter(edge=>passEdge(edge)));
       }
       function edgePath(path) {
         const ids = new Set();
@@ -7921,6 +7978,7 @@
       };
       document.getElementById("focusTarget").onclick = () => {
         if (transactionTreeState.active) { transactionGraphCenterTarget(); return; }
+        if(!visibleIds.has(target)){mode.textContent=uiLabel("Цель скрыта текущими фильтрами. Сбросьте ограничения для центрирования.","The target is hidden by active filters. Reset the restrictions to center it.");return;}
         if (graph3dState.active) { graph3dMarkCameraUserInput(); focusGraph3dNode(target); }
         else focus(target);
       };
@@ -7952,14 +8010,21 @@
         event.preventDefault();
         selectSearchResult(item.dataset.nodeId);
       });
-      for (const item of [nodeTypeSelect, edgeTypeSelect, thresholdInput]) item.addEventListener("input", applyFilters);
-      graphInvestigationModeSelect.addEventListener("input", () => {
+      function changeGraphInvestigationMode() {
         graphIsolationDepth = 1;
         isolated = null;
-        if (graphInvestigationModeSelect.value !== "all") clearGraphSearch();
+        graph3dState.contextIsolate = "";
         applyFilters();
         if (graph3dState.active && graphInvestigationModeSelect.value === "path" && (selected || searchFocusId)) focusGraph3dNode(selected?.id || searchFocusId);
-      });
+      }
+      function bindGraphFilterControls() {
+        for (const item of [nodeTypeSelect,edgeTypeSelect,thresholdInput,graphInvestigationModeSelect]) {
+          if(item._gansarGraphBound)continue;item._gansarGraphBound=true;
+          const handler=item===graphInvestigationModeSelect?changeGraphInvestigationMode:()=>applyFilters();
+          item.addEventListener("input",handler);item.addEventListener("change",handler);
+        }
+      }
+      bindGraphFilterControls();
       graphLegend.addEventListener("click", event => {
         const button = event.target.closest(".legend-toggle");
         if (!button?.dataset.group) return;
@@ -8448,10 +8513,12 @@
       graph3dContainer.addEventListener("pointerup", graph3dScheduleIdlePause);
       graph3dContainer.addEventListener("pointerleave", () => { showGraph3dTip(null, null); graph3dScheduleIdlePause(); });
       graph3dContainer.addEventListener("wheel", () => { graph3dResumeAuto(); graph3dScheduleIdlePause(); }, {passive: true});
-      document.getElementById("reset").onclick = () => {
+      function resetGraphView() {
         if (transactionTreeState.active) { transactionTreeReset(); return; }
-        if(graph2dActive()){graph2dState.pages.clear();graph2dState.all.clear();graph2dState.history=[];graph2dState.positions.clear();graph2dState.signature="";}
+        if(graph2dActive()){graph2dState.pages.clear();graph2dState.all.clear();graph2dState.history=[];graph2dState.filterSnapshot=null;graph2dState.positions.clear();graph2dState.signature="";}
         isolated = null;
+        graph3dState.contextIsolate="";graph3dState.groupPages?.clear();graph3dState.contextHistory=[];
+        transactionGraphState.query="";transactionGraphState.expanded.clear();transactionGraphState.limits.clear();
         pathIds = new Set();
         selected = null;
         selectedEdge = null;
@@ -8465,9 +8532,10 @@
         syncCustomSelects();
         applyFilters();
         graph3dState.active ? graph3dZoomToFit() : fit();
-      };
-      document.getElementById("isolate").onclick = () => { if (transactionTreeState.active) { transactionGraphIsolateSelected(); return; } if (!selected) return; if(graph2dActive()&&selected.__g2d_group){graph2dGroupAction(selected.groupKey,"isolate");return;} setGraphInvestigationMode("isolate", 1); graph3dState.active ? focusGraph3dNode(selected.id) : focus(selected.id); };
-      document.getElementById("trace").onclick = () => { if (!selected||selected.__g2d_group) return; setGraphInvestigationMode("path", 1); graph3dState.active ? focusGraph3dNode(selected.id) : focus(selected.id); };
+      }
+      document.getElementById("reset").onclick = resetGraphView;
+      document.getElementById("isolate").onclick = () => { if (transactionTreeState.active) { transactionGraphIsolateSelected(); return; } if (!selected) return; if(graph2dActive()&&selected.__g2d_group){graph2dGroupAction(selected.groupKey,"isolate");return;} const id=selected.id;setGraphInvestigationMode("isolate", 1); if(selected)graph3dState.active ? focusGraph3dNode(id) : focus(id); };
+      document.getElementById("trace").onclick = () => { if(transactionTreeState.active){transactionGraphTraceSelected();return;} if (!selected||selected.__g2d_group) return; const id=selected.id;setGraphInvestigationMode("path", 1); if(selected)graph3dState.active ? focusGraph3dNode(id) : focus(id); };
       document.querySelectorAll(".activity-cover-img").forEach(image => image.addEventListener("error", () => {
         const fallback = image.dataset.fallbackSrc || "";
         if (!fallback || image.src === fallback) return;

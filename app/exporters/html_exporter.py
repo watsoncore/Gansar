@@ -3962,6 +3962,7 @@ def _ton_message_execution(tx: Transaction) -> str:
 
 
 def _transaction_views(report: AddressReport, language: str, service_views: dict | None = None) -> list[dict]:
+    ens_aliases = {row["address"]: row["name"] for row in _ens_wallet_identities(report)}
     service_views = _attribution_views(report) if service_views is None else service_views
     service_addresses = service_views.get("addresses", {})
     labels_by_address: dict[tuple[str, str], list[str]] = {}
@@ -4078,7 +4079,8 @@ def _transaction_views(report: AddressReport, language: str, service_views: dict
                 "outputs_summary": "",
                 "method": method,
                 "tags": list(dict.fromkeys(([service] if service else []) + ([status] if status else []) + address_tags + (["suspicious"] if suspicious else [])))[:4],
-                "q": " ".join(str(item or "") for item in (tx.chain, tx.tx_hash, tx.from_address, tx.to_address, tx.asset, tx.source, service, kind, status)).lower(),
+                "q": " ".join(str(item or "") for item in (tx.chain, tx.tx_hash, tx.from_address, tx.to_address, tx.asset, tx.source, service, kind, status,
+                    *(ens_aliases.get(canonical_address("eth", value), "") for value in (tx.from_address, tx.to_address) if tx.chain == "eth"))).lower(),
             }
         )
     # Keep source actions and remote trace context visible without presenting
@@ -4850,6 +4852,46 @@ def _ens_record_views(records: dict[str, str]) -> list[dict]:
     return out
 
 
+def _ens_wallet_identities(report: AddressReport) -> list[dict]:
+    """Bind a retained verified ENS result to its exact Ethereum wallet.
+
+    This is presentation metadata, never a financial entity or an additional
+    lookup. Reverse publications and other-chain address records cannot supply
+    an Ethereum wallet's display name.
+    """
+    from app.sources.ethereum_ens import normalize_name
+    profile = getattr(report, "ens_profile", None) or {}
+    provenance = profile.get("provenance") or {}
+    if not isinstance(provenance, dict):
+        return []
+    target = canonical_address("eth", report.target_address)
+    resolved = canonical_address("eth", report.ens_resolved_address or "")
+    profile_address = canonical_address("eth", profile.get("resolved_address") or "")
+    source_address = canonical_address("eth", profile.get("source_address") or "")
+    if ("eth" not in report.detected_chains or not target or target != resolved
+            or target != profile_address or target != source_address
+            or profile.get("forward_verified") is not True
+            or profile.get("source") != "ethereum_ens"
+            or provenance.get("chain_id") != 1
+            or provenance.get("network") != "ethereum-mainnet"):
+        return []
+    try:
+        name = normalize_name(profile.get("name") or "")
+        retained_name = normalize_name(report.ens_name or "")
+    except ValueError:
+        return []
+    if name != retained_name:
+        return []
+    primary = bool(profile.get("primary_verified") is True and report.ens_reverse_valid is True
+                   and profile.get("primary_name") == name and report.reverse_ens == name)
+    return [{"chain": "eth", "address": target, "name": name,
+        "forward_verified": True, "primary_verified": primary,
+        "verification": "forward_verified", "source": "ethereum_ens",
+        "source_url": safe_href(profile.get("source_url")),
+        "retrieved_at": profile.get("retrieved_at"), "provenance": dict(provenance),
+        "ownership_claim": False}]
+
+
 def _ens_summary(report: AddressReport, language: str) -> dict:
     status_labels = I18N[language]
     reverse_valid = report.ens_reverse_valid
@@ -4883,6 +4925,7 @@ def _ens_summary(report: AddressReport, language: str) -> dict:
         "record_views": _ens_record_views(records),
         "warnings": report.ens_warnings,
         "profile": profile,
+        "wallet_identities": _ens_wallet_identities(report),
     }
 
 
@@ -5358,12 +5401,11 @@ def _prepare_html_template(
         # Unified facts already retain all legacy TON observations and their
         # pooled raw sources. The compatibility copy is not used by these views.
         exclusions["ton_service_intelligence"] = True
-    render_data = report.model_dump(exclude=exclusions)
     # AddressReport's inherited before-validator applies portable_observation
     # (including full secret redaction) to this entire tree. An extra outer
     # sanitizer repeats the same walk; retain model/child/URL/HTML guards.
-    report = AddressReport.model_validate(render_data)
-    del render_data
+    from app.models.report import validated_report_copy
+    report = validated_report_copy(report, exclude=exclusions)
     graph = safe_graph_payload(graph or {})
     nft_data = getattr(report, "nft_intelligence", None)
     service_views = _attribution_views(report)

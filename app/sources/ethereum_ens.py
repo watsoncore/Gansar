@@ -135,6 +135,17 @@ class EthereumEnsSource(Source):
                         out.target_address = target
                         out.ens_name = input_name
                         out.ens_resolved_address = forward
+                        # Resolution is an independent on-chain observation.
+                        # A later optional profile/thumbnail failure must not
+                        # discard a verified input-to-wallet binding.
+                        context = lookup.resolutions.get(input_name)
+                        out.resolver = context[0] if context else None
+                        profile.update({"name": input_name, "resolved_address": forward,
+                            "forward_verified": True, "primary_verified": False,
+                            "source_address": target, "resolver": out.resolver,
+                            "resolver_name": context[1] if context else input_name,
+                            "resolution_method": "ensip10" if context and context[2] else "registry_resolver",
+                            "source_url": _name_url(input_name)})
                 if ETH_RE.fullmatch(target):
                     reverse_name = f"{target[2:].lower()}.addr.reverse"
                     reverse_context = await self._find_resolver(lookup, reverse_name)
@@ -164,9 +175,6 @@ class EthereumEnsSource(Source):
                     # An unverified reverse name must not supply another name's
                     # text/avatar records as the queried wallet's profile.
                     if context and (input_name or out.ens_reverse_valid):
-                        out.text_records, addresses = await asyncio.gather(
-                            self._text_records(lookup, profile_name, context),
-                            self._address_records(lookup, profile_name, context))
                         profile.update({"name": profile_name, "input_name": input_name,
                             "resolved_address": out.ens_resolved_address, "resolver": out.resolver,
                             "resolver_name": context[1], "resolution_method": "ensip10" if context[2] else "registry_resolver",
@@ -175,8 +183,11 @@ class EthereumEnsSource(Source):
                             "primary_name": out.reverse_ens if out.ens_reverse_valid else None,
                             "primary_verified": bool(out.ens_reverse_valid and out.reverse_ens == profile_name),
                             "forward_verified": bool(out.ens_resolved_address),
-                            "records": dict(out.text_records), "addresses": addresses,
                             "source_url": _name_url(profile_name), "source_address": target})
+                        out.text_records, addresses = await asyncio.gather(
+                            self._text_records(lookup, profile_name, context),
+                            self._address_records(lookup, profile_name, context))
+                        profile.update({"records": dict(out.text_records), "addresses": addresses})
                 forward_avatar = out.text_records.get("avatar") if input_name or out.ens_reverse_valid else None
                 avatar_record = forward_avatar if input_name else reverse_avatar or forward_avatar
                 if avatar_record:

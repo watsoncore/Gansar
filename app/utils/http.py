@@ -43,6 +43,34 @@ _TON_PUBLIC_INTERVAL_SECONDS = 1.0
 _TON_RATE_LIMIT_DEFAULT_COOLDOWN = 5.0
 _TON_HOST_GATES: WeakKeyDictionary = WeakKeyDictionary()
 _REQUEST_SCOPE = ContextVar('gansar_optional_request_scope', default=None)
+_REQUEST_DIAGNOSTICS = ContextVar('gansar_request_diagnostics', default=None)
+
+
+@contextmanager
+def request_diagnostics(ledger):
+    """Transport counters scoped to one collector; never store URLs/credentials."""
+    token = _REQUEST_DIAGNOSTICS.set(ledger)
+    try:
+        yield ledger
+    finally:
+        _REQUEST_DIAGNOSTICS.reset(token)
+
+
+async def _diagnostic_request_hook(request):
+    ledger = _REQUEST_DIAGNOSTICS.get()
+    if ledger is not None:
+        ledger['transport_attempts'] = ledger.get('transport_attempts', 0) + 1
+        request.extensions['_gansar_diagnostic_started'] = time.monotonic()
+
+
+async def _diagnostic_response_hook(response):
+    ledger = _REQUEST_DIAGNOSTICS.get()
+    if ledger is not None:
+        status = str(response.status_code)
+        statuses = ledger.setdefault('statuses', {})
+        statuses[status] = statuses.get(status, 0) + 1
+        elapsed = time.monotonic() - response.request.extensions.get('_gansar_diagnostic_started', time.monotonic())
+        ledger['response_wait_seconds'] = ledger.get('response_wait_seconds', 0.0) + elapsed
 
 
 class RequestBudgetExceeded(RuntimeError):
@@ -124,7 +152,8 @@ async def _ton_response_hook(response: httpx.Response) -> None:
 
 def _ensure_ton_transport_hooks(client: httpx.AsyncClient) -> httpx.AsyncClient:
     for kind, hook in (("request", _ton_request_hook), ("response", _ton_response_hook),
-                       ("request", _scoped_request_hook), ("response", _scoped_response_hook)):
+                       ("request", _scoped_request_hook), ("response", _scoped_response_hook),
+                       ("request", _diagnostic_request_hook), ("response", _diagnostic_response_hook)):
         hooks = client.event_hooks.setdefault(kind, [])
         if hook not in hooks:
             if hook is _scoped_request_hook:hooks.append(hook)
@@ -351,6 +380,9 @@ async def request_json(
     cache_ttl: float | None = None,
 ) -> Any:
     _ensure_ton_transport_hooks(client)
+    diagnostics = _REQUEST_DIAGNOSTICS.get()
+    if diagnostics is not None:
+        diagnostics['logical_requests'] = diagnostics.get('logical_requests', 0) + 1
     cache_key = _request_key(method, url, params, json, data, client=client, headers=headers)
     bypass_cache = cache_ttl == 0 or any(str(k).lower() == "cache-control" and "no-cache" in str(v).lower() for k, v in (headers or {}).items())
     from app.utils import public_history_cache
@@ -358,9 +390,13 @@ async def request_json(
         {**dict(client.headers), **(headers or {})})
     public_cached = public_history_cache.get(public_key, _CACHE_TTL_SECONDS if cache_ttl is None else cache_ttl)
     if public_cached is not None:
+        if diagnostics is not None:
+            diagnostics['cache_hits'] = diagnostics.get('cache_hits', 0) + 1
         return public_cached
     cached = None if bypass_cache else _cache_get(_JSON_CACHE, cache_key, _CACHE_TTL_SECONDS if cache_ttl is None else cache_ttl)
     if cached is not None:
+        if diagnostics is not None:
+            diagnostics['cache_hits'] = diagnostics.get('cache_hits', 0) + 1
         return cached
     inflight_key = f"json:{cache_key}"
     if bypass_cache:

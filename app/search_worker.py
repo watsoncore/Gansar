@@ -126,6 +126,17 @@ async def execute(request):
                     "saved_at": datetime.now(timezone.utc).isoformat()}, ensure_ascii=False)+"\n")
         try:
             chains = detect_candidates(query)
+            if not chains:
+                # The worker bootstraps the same name input handled by the
+                # main resolver. Syntax classification schedules no RPC and
+                # never supplies a wallet address before forward resolution.
+                from app.sources.ethereum_ens import normalize_name
+                try:
+                    normalized_name = normalize_name(query)
+                except ValueError:
+                    normalized_name = ""
+                if normalized_name.endswith(".eth"):
+                    chains = ["eth"]
             if not chains and not looks_like_nft_input(query):
                 raise ValueError("Unknown input format; no collectors scheduled")
             fallback = AddressReport(target_address=query, detected_chains=chains or ["ton"],

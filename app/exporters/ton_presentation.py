@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import binascii
 import re
+from collections import OrderedDict
 from urllib.parse import unquote, urlsplit, urlunsplit
 
 from app.utils.ton_normalize import parse_ton_address
@@ -42,11 +43,26 @@ class TonPresentation:
         for value in (resolution.get('query'), resolution.get('original_query'), getattr(report, 'target_address', None)):
             self._register_text(value, 300)
         seen = set()
+        text_seen = OrderedDict()
+        key_seen = OrderedDict()
+        def first_visit(text, cache):
+            # Repeated immutable schema strings have identical presentation.
+            # Bound this per-construction cache; never retain report text globally.
+            if len(text) > 16384:
+                return True
+            if text in cache:
+                cache.move_to_end(text)
+                return False
+            if len(cache) >= 8192:
+                cache.popitem(last=False)
+            cache[text] = True
+            return True
         stack = [report, graph or {}]
         while stack:
             value = stack.pop()
             if isinstance(value, str):
-                self._register_text(value, 100)
+                if first_visit(value, text_seen):
+                    self._register_text(value, 100)
             elif isinstance(value, (dict, list, tuple)) or hasattr(type(value), 'model_fields'):
                 if id(value) in seen:
                     continue
@@ -56,7 +72,7 @@ class TonPresentation:
                     # Qualified canonical address keys can appear without a
                     # duplicate address property in compact source projections.
                     for key in value:
-                        if isinstance(key, str):
+                        if isinstance(key, str) and first_visit(key, key_seen):
                             self._register(key, 0)
                 elif isinstance(value, (list, tuple)):
                     stack.extend(value)
@@ -69,13 +85,15 @@ class TonPresentation:
     def _register_text(self, value, priority):
         if not isinstance(value, str):
             return
-        if parse_ton_address(_plain(value)):
+        if _ADDRESS.fullmatch(value) and parse_ton_address(_plain(value)):
             self._register(value, priority)
         elif len(value) < 16384:
             for match in _ADDRESS.finditer(value):
                 self._register(match.group(), priority)
 
     def _register(self, value, priority):
+        if not _ADDRESS.fullmatch(value):
+            return
         parsed = parse_ton_address(_plain(value))
         if not parsed:
             return

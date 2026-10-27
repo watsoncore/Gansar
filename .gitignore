@@ -46,8 +46,19 @@ dist/
 !/validation/advanced_inference_20261020/research/captures/wormhole_sample_receipt.json
 !/validation/advanced_inference_20261020/research/captures/wormhole_sample_vaa_response.json
 
-# Historical case notes/screenshots remain local; public docs are README and PROJECT_MAP.
-/screenshots/
+# Historical case notes remain local; public docs are README and PROJECT_MAP.
+# Publish only reviewed interface screenshots; other images remain local.
+/screenshots/*
+!/screenshots/2d_graph.png
+!/screenshots/about.png
+!/screenshots/about2.png
+!/screenshots/Behavioral_Fingerprint.png
+!/screenshots/graph_derevo.png
+!/screenshots/graph_derevo2.png
+!/screenshots/rumenu.png
+!/screenshots/Transactions.png
+!/screenshots/search.png
+!/screenshots/Gift_Route_Intelligence.png
 /GANSAR_*.md
 /*_RESEARCH.md
 /*_VALIDATION.md
