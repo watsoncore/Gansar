@@ -1,0 +1,415 @@
+{
+  "kind": "SEALED_PREVIOUSLY_COLLECTED_REAL_RESPONSES_NOT_A_NEW_LIVE_TEST",
+  "source_audit": "validation\\full_depth\\offline_owner_codec_nft_alias_proof.json",
+  "canonical_events": [
+    {
+      "event_id": "ton:nft:event:1d7de254457b4d875264709ea597c4b08d58612e1b1a89484a621dab7229f3b8",
+      "asset_address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+      "event_type": "transfer",
+      "status": "success",
+      "from_address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+      "to_address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+      "timestamp": "2026-10-10T12:47:40Z",
+      "transaction_hash": "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+      "trace_id": "ff3dd09be0f3409f6245fbd77ea3c675bdb0f5dacd9fc95f6d9b62453b912606",
+      "logical_time": 109047991000003,
+      "action_index": null,
+      "message_hash": null,
+      "query_id": "0",
+      "money": {
+        "currency": "TON",
+        "token_contract": null,
+        "base_units": 1,
+        "decimals": 9,
+        "amount": "1E-9"
+      },
+      "fee": null,
+      "marketplace": null,
+      "marketplace_address": null,
+      "evidence_ids": [
+        "ton:nft:evidence:d0c26c5cf654eac6de8a3f77dd917ecb755cf9c396cb08996b03bcdf05dacd9e",
+        "ton:nft:evidence:1c913c27964218919596a4e01d702cc71c47ab68e1e47088e52d87bed93202d2",
+        "ton:nft:evidence:8a64937323f954bdfa5d607351841da762c8370a274209fa36accf29ee8ba429",
+        "ton:nft:evidence:e502cd6a7dfe44765748087eae759931f690567a29be30e70534c30d71d7da23",
+        "ton:nft:evidence:9f471cdf8a6fe3c5b28bb91ab213477affc9e764fcc5a9d3e8d9923c1789c79a"
+      ],
+      "observation_ids": [
+        "obs:22e64b10cff2a994aa20bcd26834fb467b7d5333c6643025c51c492366affc0b",
+        "obs:e54313160326ff3b3ad27618911c779eecf3a0e464cdfc76004da45788774d41",
+        "obs:8f4cda9c7b6320aef1daceb7c272da30f3fa03e538d264b52905dd790a4821e8",
+        "obs:49ad4d1c93dfe772f2ce041127ef7ce5d0e3132e5461c43a85b15cf063957959",
+        "obs:1e61fc4323b0b6e935a960ee2c9e16904bd5118b994e38ff66cd409850ffab92"
+      ],
+      "provider_event_ids": [
+        "ff3dd09be0f3409f6245fbd77ea3c675bdb0f5dacd9fc95f6d9b62453b912606"
+      ],
+      "verification": "verified_onchain",
+      "raw": {
+        "query_id": "0",
+        "nft_address": "0:CF17079FF86F6A8CF4E8587C89885616B79A0F93C4756AAD3DDF379BE43876F7",
+        "nft_collection": "0:1720ADD37F0BCA2B083B79D71EF176B6F0B4257E10F0DAC9A2151FF1F91183EE",
+        "transaction_hash": "MNwSVeMDOeUJxy/41eWvF6kC5GxDnyxJn2a96HVEKlc=",
+        "transaction_lt": "109047991000003",
+        "transaction_now": 1791636460,
+        "transaction_aborted": false,
+        "old_owner": "0:0222F44A64B92D6761E573C4EC6E7EC1F057FC9AB7A4722580D41E946216BF8D",
+        "new_owner": "0:455024810CAEF5D106159C1A1C7DECC336F3BBC7198BAC97409CB13CC1C88C17",
+        "response_destination": "0:7AE5056C3FD9406F9BBBE7C7089CD4C40801D9075486CBEDB7CE12DF119EACF1",
+        "custom_payload": null,
+        "decoded_custom_payload": null,
+        "forward_amount": "1",
+        "forward_payload": null,
+        "decoded_forward_payload": null,
+        "trace_id": "/z3Qm+DzQJ9iRfvXfqPGdb2w9drNn8lfbZtiRTuRJgY=",
+        "corroborating_observations": [
+          {
+            "event_id": "ton:nft:event:c11aeada262b097fd68abc709b26bcd95a0e690ae6f4843a067690563a4a09b7",
+            "asset_address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+            "event_type": "transfer",
+            "status": "success",
+            "from_address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+            "to_address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+            "timestamp": "2026-10-10T12:47:40Z",
+            "transaction_hash": null,
+            "trace_id": "ff3dd09be0f3409f6245fbd77ea3c675bdb0f5dacd9fc95f6d9b62453b912606",
+            "logical_time": 109047991000001,
+            "action_index": 0,
+            "message_hash": null,
+            "query_id": null,
+            "money": null,
+            "fee": null,
+            "marketplace": null,
+            "marketplace_address": null,
+            "evidence_ids": [
+              "ton:nft:evidence:8a64937323f954bdfa5d607351841da762c8370a274209fa36accf29ee8ba429"
+            ],
+            "observation_ids": [
+              "obs:8f4cda9c7b6320aef1daceb7c272da30f3fa03e538d264b52905dd790a4821e8"
+            ],
+            "provider_event_ids": [
+              "ff3dd09be0f3409f6245fbd77ea3c675bdb0f5dacd9fc95f6d9b62453b912606"
+            ],
+            "verification": "provider_reported",
+            "raw": {
+              "action": {
+                "type": "NftItemTransfer",
+                "status": "ok",
+                "NftItemTransfer": {
+                  "sender": {
+                    "address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+                    "is_scam": false,
+                    "is_wallet": true
+                  },
+                  "recipient": {
+                    "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+                    "name": "424242.ton",
+                    "is_scam": false,
+                    "is_wallet": true
+                  },
+                  "nft": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7"
+                },
+                "simple_preview": {
+                  "name": "NFT Transfer",
+                  "description": "Transferring 1 NFT",
+                  "value": "1 NFT",
+                  "accounts": [
+                    {
+                      "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+                      "name": "424242.ton",
+                      "is_scam": false,
+                      "is_wallet": true
+                    },
+                    {
+                      "address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+                      "is_scam": false,
+                      "is_wallet": false
+                    }
+                  ]
+                },
+                "base_transactions": [
+                  "7dc149a336568190e418fbcd43822b40d2d831b227c04c931767d95a0eeac0f2",
+                  "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+                  "d76405d6fb6ba1f429844731cecd395b55ef4bb34c63a28908807d6ca815d474"
+                ]
+              },
+              "in_progress": false,
+              "base_transactions": [
+                "7dc149a336568190e418fbcd43822b40d2d831b227c04c931767d95a0eeac0f2",
+                "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+                "d76405d6fb6ba1f429844731cecd395b55ef4bb34c63a28908807d6ca815d474"
+              ],
+              "event_extra": -52487471
+            }
+          },
+          {
+            "event_id": "ton:nft:event:3a05a9695ebb9d0ed0aa6bf7ddec98910209c4d8284f255de4dca8822b1d50f7",
+            "asset_address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+            "event_type": "transfer",
+            "status": "unknown",
+            "from_address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+            "to_address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+            "timestamp": "2026-10-10T12:47:40Z",
+            "transaction_hash": "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+            "trace_id": null,
+            "logical_time": 109047991000003,
+            "action_index": null,
+            "message_hash": null,
+            "query_id": null,
+            "money": null,
+            "fee": null,
+            "marketplace": null,
+            "marketplace_address": null,
+            "evidence_ids": [
+              "ton:nft:evidence:e502cd6a7dfe44765748087eae759931f690567a29be30e70534c30d71d7da23",
+              "ton:nft:evidence:9f471cdf8a6fe3c5b28bb91ab213477affc9e764fcc5a9d3e8d9923c1789c79a"
+            ],
+            "observation_ids": [
+              "obs:49ad4d1c93dfe772f2ce041127ef7ce5d0e3132e5461c43a85b15cf063957959",
+              "obs:1e61fc4323b0b6e935a960ee2c9e16904bd5118b994e38ff66cd409850ffab92"
+            ],
+            "provider_event_ids": [],
+            "verification": "provider_reported",
+            "raw": {
+              "operation": "transfer",
+              "utime": 1791636460,
+              "lt": 109047991000003,
+              "transaction_hash": "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+              "source": {
+                "address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+                "is_scam": false,
+                "is_wallet": true
+              },
+              "destination": {
+                "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+                "name": "424242.ton",
+                "is_scam": false,
+                "is_wallet": true
+              },
+              "item": {
+                "address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+                "index": 5222,
+                "owner": {
+                  "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+                  "name": "424242.ton",
+                  "is_scam": false,
+                  "is_wallet": true
+                },
+                "collection": {
+                  "address": "0:1720add37f0bca2b083b79d71ef176b6f0b4257e10f0dac9a2151ff1f91183ee",
+                  "name": "Blue Eyes Hat",
+                  "description": "To see better obviously\n\nMeet Dogs and get ready to meet your new best friend who’s always got your back (and your snacks)!"
+                },
+                "verified": true,
+                "metadata": {
+                  "image": "https://cdn.stickerdom.store/1/t/69/9.png?v=3",
+                  "lottie": "https://cdn.stickerdom.store/1/o/69/67b3b3c92ba4a66651fd132c213e78a1.lottie.json?v=3",
+                  "description": "To see better obviously",
+                  "marketplace": "getgems.io",
+                  "name": "Blue Eyes Hat #5222"
+                },
+                "previews": [
+                  {
+                    "resolution": "5x5",
+                    "url": "https://cache.tonapi.io/imgproxy/gvYrNJzZZT1qMG5tYi4ZirM4jjSoYerKmUU5Ckf-RjQ/rs:fill:5:5:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+                  },
+                  {
+                    "resolution": "100x100",
+                    "url": "https://cache.tonapi.io/imgproxy/baOVrUqOYXnJTMych-4qkZSAq-WCn7ZbOW-nSwZmh8s/rs:fill:100:100:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+                  },
+                  {
+                    "resolution": "500x500",
+                    "url": "https://cache.tonapi.io/imgproxy/D_Wka7qwohtfAVrad77n8xNohQmXGD7suqJAUiNj4KM/rs:fill:500:500:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+                  },
+                  {
+                    "resolution": "1500x1500",
+                    "url": "https://cache.tonapi.io/imgproxy/CiSfJOSwW2-GW1i2CxacLgU7ixbaBAs_vbdzVmrgXwI/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+                  }
+                ],
+                "approved_by": [
+                  "getgems"
+                ],
+                "trust": "whitelist",
+                "code_hash": "WFkTv+s4jbGZfSvvsYBvLHnxghM34bDo+xgr3sQOKMI=",
+                "data_hash": "vVBkZo0rdGIyoMrhOzW/PlYal42XvZeYqis/cShDpPo="
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "previous_full_events": [
+    {
+      "event_id": "ton:nft:event:3a05a9695ebb9d0ed0aa6bf7ddec98910209c4d8284f255de4dca8822b1d50f7",
+      "asset_address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+      "event_type": "transfer",
+      "status": "unknown",
+      "from_address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+      "to_address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+      "timestamp": "2026-10-10T12:47:40Z",
+      "transaction_hash": "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+      "trace_id": null,
+      "logical_time": 109047991000003,
+      "action_index": null,
+      "message_hash": null,
+      "query_id": null,
+      "money": null,
+      "fee": null,
+      "marketplace": null,
+      "marketplace_address": null,
+      "evidence_ids": [
+        "ton:nft:evidence:e502cd6a7dfe44765748087eae759931f690567a29be30e70534c30d71d7da23",
+        "ton:nft:evidence:9f471cdf8a6fe3c5b28bb91ab213477affc9e764fcc5a9d3e8d9923c1789c79a"
+      ],
+      "observation_ids": [
+        "obs:49ad4d1c93dfe772f2ce041127ef7ce5d0e3132e5461c43a85b15cf063957959",
+        "obs:1e61fc4323b0b6e935a960ee2c9e16904bd5118b994e38ff66cd409850ffab92"
+      ],
+      "provider_event_ids": [],
+      "verification": "provider_reported",
+      "raw": {
+        "operation": "transfer",
+        "utime": 1791636460,
+        "lt": 109047991000003,
+        "transaction_hash": "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+        "source": {
+          "address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+          "is_scam": false,
+          "is_wallet": true
+        },
+        "destination": {
+          "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+          "name": "424242.ton",
+          "is_scam": false,
+          "is_wallet": true
+        },
+        "item": {
+          "address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+          "index": 5222,
+          "owner": {
+            "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+            "name": "424242.ton",
+            "is_scam": false,
+            "is_wallet": true
+          },
+          "collection": {
+            "address": "0:1720add37f0bca2b083b79d71ef176b6f0b4257e10f0dac9a2151ff1f91183ee",
+            "name": "Blue Eyes Hat",
+            "description": "To see better obviously\n\nMeet Dogs and get ready to meet your new best friend who’s always got your back (and your snacks)!"
+          },
+          "verified": true,
+          "metadata": {
+            "image": "https://cdn.stickerdom.store/1/t/69/9.png?v=3",
+            "lottie": "https://cdn.stickerdom.store/1/o/69/67b3b3c92ba4a66651fd132c213e78a1.lottie.json?v=3",
+            "description": "To see better obviously",
+            "marketplace": "getgems.io",
+            "name": "Blue Eyes Hat #5222"
+          },
+          "previews": [
+            {
+              "resolution": "5x5",
+              "url": "https://cache.tonapi.io/imgproxy/gvYrNJzZZT1qMG5tYi4ZirM4jjSoYerKmUU5Ckf-RjQ/rs:fill:5:5:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+            },
+            {
+              "resolution": "100x100",
+              "url": "https://cache.tonapi.io/imgproxy/baOVrUqOYXnJTMych-4qkZSAq-WCn7ZbOW-nSwZmh8s/rs:fill:100:100:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+            },
+            {
+              "resolution": "500x500",
+              "url": "https://cache.tonapi.io/imgproxy/D_Wka7qwohtfAVrad77n8xNohQmXGD7suqJAUiNj4KM/rs:fill:500:500:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+            },
+            {
+              "resolution": "1500x1500",
+              "url": "https://cache.tonapi.io/imgproxy/CiSfJOSwW2-GW1i2CxacLgU7ixbaBAs_vbdzVmrgXwI/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9jZG4uc3RpY2tlcmRvbS5zdG9yZS8xL3QvNjkvOS5wbmc_dj0z.webp"
+            }
+          ],
+          "approved_by": [
+            "getgems"
+          ],
+          "trust": "whitelist",
+          "code_hash": "WFkTv+s4jbGZfSvvsYBvLHnxghM34bDo+xgr3sQOKMI=",
+          "data_hash": "vVBkZo0rdGIyoMrhOzW/PlYal42XvZeYqis/cShDpPo="
+        }
+      }
+    },
+    {
+      "event_id": "ton:nft:event:c11aeada262b097fd68abc709b26bcd95a0e690ae6f4843a067690563a4a09b7",
+      "asset_address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+      "event_type": "transfer",
+      "status": "success",
+      "from_address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+      "to_address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+      "timestamp": "2026-10-10T12:47:40Z",
+      "transaction_hash": null,
+      "trace_id": "ff3dd09be0f3409f6245fbd77ea3c675bdb0f5dacd9fc95f6d9b62453b912606",
+      "logical_time": 109047991000001,
+      "action_index": 0,
+      "message_hash": null,
+      "query_id": null,
+      "money": null,
+      "fee": null,
+      "marketplace": null,
+      "marketplace_address": null,
+      "evidence_ids": [
+        "ton:nft:evidence:8a64937323f954bdfa5d607351841da762c8370a274209fa36accf29ee8ba429"
+      ],
+      "observation_ids": [
+        "obs:8f4cda9c7b6320aef1daceb7c272da30f3fa03e538d264b52905dd790a4821e8"
+      ],
+      "provider_event_ids": [
+        "ff3dd09be0f3409f6245fbd77ea3c675bdb0f5dacd9fc95f6d9b62453b912606"
+      ],
+      "verification": "provider_reported",
+      "raw": {
+        "action": {
+          "type": "NftItemTransfer",
+          "status": "ok",
+          "NftItemTransfer": {
+            "sender": {
+              "address": "0:0222f44a64b92d6761e573c4ec6e7ec1f057fc9ab7a4722580d41e946216bf8d",
+              "is_scam": false,
+              "is_wallet": true
+            },
+            "recipient": {
+              "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+              "name": "424242.ton",
+              "is_scam": false,
+              "is_wallet": true
+            },
+            "nft": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7"
+          },
+          "simple_preview": {
+            "name": "NFT Transfer",
+            "description": "Transferring 1 NFT",
+            "value": "1 NFT",
+            "accounts": [
+              {
+                "address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+                "name": "424242.ton",
+                "is_scam": false,
+                "is_wallet": true
+              },
+              {
+                "address": "0:cf17079ff86f6a8cf4e8587c89885616b79a0f93c4756aad3ddf379be43876f7",
+                "is_scam": false,
+                "is_wallet": false
+              }
+            ]
+          },
+          "base_transactions": [
+            "7dc149a336568190e418fbcd43822b40d2d831b227c04c931767d95a0eeac0f2",
+            "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+            "d76405d6fb6ba1f429844731cecd395b55ef4bb34c63a28908807d6ca815d474"
+          ]
+        },
+        "in_progress": false,
+        "base_transactions": [
+          "7dc149a336568190e418fbcd43822b40d2d831b227c04c931767d95a0eeac0f2",
+          "30dc1255e30339e509c72ff8d5e5af17a902e46c439f2c499f66bde875442a57",
+          "d76405d6fb6ba1f429844731cecd395b55ef4bb34c63a28908807d6ca815d474"
+        ],
+        "event_extra": -52487471
+      }
+    }
+  ]
+}

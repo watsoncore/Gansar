@@ -1,0 +1,259 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "id": "graphsense_binance",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-binance.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "binance"
+    },
+    {
+      "id": "graphsense_bitfinex",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-bitfinexcom.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "bitfinex"
+    },
+    {
+      "id": "graphsense_bitmex0",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-bitmex_0.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "bitmex"
+    },
+    {
+      "id": "graphsense_bybit",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-bybit.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "bybit"
+    },
+    {
+      "id": "graphsense_cryptocom",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-cryptocom.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "crypto_com"
+    },
+    {
+      "id": "graphsense_deribit",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-deribit.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "deribit"
+    },
+    {
+      "id": "graphsense_huobi",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-huobi.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "huobi"
+    },
+    {
+      "id": "graphsense_kucoin",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-kucoin.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "kucoin"
+    },
+    {
+      "id": "graphsense_okx",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/exchange-wallets-okx.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ],
+      "entity_id": "okx"
+    },
+    {
+      "id": "graphsense_walletexplorer",
+      "url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/packs/walletexplorer.yaml",
+      "format": "yaml",
+      "adapter": "graphsense",
+      "license": "MIT",
+      "license_url": "https://github.com/graphsense/graphsense-tagpacks/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/graphsense/graphsense-tagpacks/master/LICENSE",
+      "license_sha256": "2c9bb5e1d50203d505b997babbb23eebda868f1280dc5ef5854263ba0dd7c4ed",
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "method": "exact_graphsense_tagpack_address",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Third-party maintained public labels; original source and historical publication date retained.",
+        "Dataset labels are not independent verification of current control. Same upstream counts once."
+      ]
+    },
+    {
+      "id": "serum_published_programs",
+      "url": "https://raw.githubusercontent.com/project-serum/serum-ts/master/packages/serum/src/markets.json",
+      "format": "json",
+      "adapter": "solana_markets",
+      "blockchain": "solana",
+      "entity_id": "serum",
+      "entity_name": "Serum published program",
+      "entity_type": "dex_program",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/project-serum/serum-ts/blob/master/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/project-serum/serum-ts/master/LICENSE",
+      "license_sha256": "12c7699ae05c42e776548377d7661e80bfd6a8092aa9af23e329eb3527c91a22",
+      "authority": "official_operator_publication",
+      "relationship": "official_published_program_address",
+      "method": "exact_publisher_program_id",
+      "upstream": "project-serum/serum-ts",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Historical Serum SDK catalog; continued operation or current controlling authority is not verified.",
+        "Program ID publication does not prove a user's signing application or ownership of interacting wallets."
+      ]
+    },
+    {
+      "id": "safe_v1_4_1_deployments",
+      "url": "https://raw.githubusercontent.com/safe-global/safe-deployments/main/src/assets/v1.4.1/safe.json",
+      "format": "json",
+      "adapter": "safe_deployments",
+      "entity_id": "safe",
+      "entity_name": "Safe v1.4.1 implementation",
+      "entity_type": "wallet_contract_implementation",
+      "license": "MIT",
+      "license_url": "https://github.com/safe-global/safe-deployments/blob/main/LICENSE",
+      "license_download_url": "https://raw.githubusercontent.com/safe-global/safe-deployments/main/LICENSE",
+      "license_sha256": "1011df32c2489faac6c9833243913c30a2fecff7ca497c07656b7e957b821a4f",
+      "authority": "official_operator_publication",
+      "relationship": "published_deployment",
+      "method": "official_deployment_manifest",
+      "upstream": "safe-global/safe-deployments",
+      "refresh_ttl_seconds": 86400,
+      "coverage_limitations": [
+        "Publisher manifest is not independent verification of current chain state or operator control.",
+        "Implementation contract identity does not identify a user's signing application or ownership of interacting wallets."
+      ]
+    },
+    {
+      "id": "tonkeeper_existing_registry",
+      "url": "https://raw.githubusercontent.com/tonkeeper/ton-assets/main/accounts.json",
+      "format": "json",
+      "adapter": "ton_accounts",
+      "blockchain": "ton",
+      "license": "unresolved_preexisting_snapshot",
+      "license_url": null,
+      "authority": "community_maintained_registry",
+      "relationship": "publicly_labeled_address",
+      "upstream": "tonkeeper/ton-assets",
+      "method": "exact_existing_ton_registry_address",
+      "update_enabled": false,
+      "original_source_sha256": "f7d0d37bdc2945c03cfdf976de82d20468e97ebeca92fc59cf6c2df5e28c9e2a",
+      "coverage_limitations": [
+        "Reuses the existing packaged TON registry without adding user control-address rules.",
+        "Repository LICENSE endpoint returned404; new redistribution/refresh permission remains unresolved.",
+        "Registry attribution is not proof of wallet application, current ownership, or independent operator verification."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "observed_at": "2026-10-16T15:09:35.496578+00:00",
+  "usage": "Unmodified official artwork for identifying a sourced service claim; no endorsement or client attribution is implied.",
+  "assets": {
+    "tonkeeper": {
+      "file": "tonkeeper.svg",
+      "mime": "image/svg+xml",
+      "name": "Tonkeeper",
+      "source_url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/ui-kit/src/icons/svg/ic-logo.svg",
+      "official_repository": "https://github.com/tonkeeper/tonkeeper-web",
+      "commit": "d7ea32150635b53b8bc6fb6c5744434d9370a347",
+      "license": "Apache-2.0",
+      "license_file": "TONKEEPER-LICENSE.txt",
+      "sha256": "7b63923a826afa713683e80a30c544149e1f5f4a580db714038ab6319da1ff21"
+    },
+    "bybit": {
+      "file": "bybit.png",
+      "mime": "image/png",
+      "name": "Bybit",
+      "source_url": "https://www.bybit.global/common-static/fht-static/cms/7ef736d3-a12d-4e27-9bc6-42b0b0b47d8a.png",
+      "brand_guidelines": "https://www.bybit.global/en/press",
+      "license": "Official press Brand Assets wordmark offered for identifying Bybit on light/dark backgrounds; unmodified, proportional use; trademarks retained; no endorsement or broader license claimed.",
+      "sha256": "3ea924d89e6b871e7bcd441f5547a107d20cabfbf65a744ea1e50fc24ac39d22"
+    },
+    "xrocket": {
+      "file": "xrocket.png",
+      "mime": "image/png",
+      "name": "xRocket",
+      "source_url": "https://xrocket.exchange/img/favicon-32x32.png",
+      "brand_guidelines": "https://xrocket.exchange/brand-kit",
+      "license": "Official brand kit use; trademark retained; no alteration/shadow/outline/stretch.",
+      "sha256": "cb7ae34f1233e7065981274218742300fb89a3fa6aa59b71899aacd296073a3f"
+    },
+    "tether": {
+      "file": "tether.svg",
+      "mime": "image/svg+xml",
+      "name": "Tether",
+      "source_url": "https://tether.to/images/logoCircle.svg",
+      "brand_guidelines": "https://tether.to/en/media/",
+      "license": "Conditional official trademark guidelines: truthful accurate reference to Tether or its tokens/services, original supplied unaltered artwork, clear undistorted display, no endorsement or independent trademark rights; permission revocable on breach/objection.",
+      "guidance_file": "TETHER-GUIDANCE.md",
+      "observed_at": "2026-10-16T17:18:29.570661+00:00",
+      "sha256": "7c9f13b068996186c4df0f3dcdeeeb86e11cee6d8a9e7597cec19ccee164d7c5"
+    },
+    "openmask": {
+      "file": "openmask.png",
+      "mime": "image/png",
+      "name": "OpenMask",
+      "source_url": "https://raw.githubusercontent.com/OpenProduct/openmask-extension/9150d57d530296f8b27ae59e4dfce865be81550e/public/openmask-logo-288.png",
+      "official_repository": "https://github.com/OpenProduct/openmask-extension",
+      "commit": "9150d57d530296f8b27ae59e4dfce865be81550e",
+      "observed_at": "2026-10-16T20:42:45.846945+00:00",
+      "license": "GPL-3.0, unmodified official repository image distributed as an independent artwork aggregate; copyright and trademark rights retained; no endorsement.",
+      "license_file": "OPENMASK-LICENSE.txt",
+      "sha256": "25ef6e0912f90e0adea8597b19554aa1518521e6cf0a88cfaec303808cf4d4b8"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script src="media-manifest.js" defer></script>
+  <script src="script.js" defer></script>
+  <title>Gansar — О проекте</title>
+</head>
+<body>
+  <header class="page-header content-width">
+    <a class="brand" href="#about" aria-label="Gansar">GANSAR</a>
+    <nav class="top-nav" data-i18n-aria="nav_label" aria-label="Навигация">
+      <a href="#project" data-i18n="nav_about">О проекте</a>
+      <a href="#contacts" data-i18n="nav_contacts">Контакты</a>
+      <a href="#support" data-i18n="nav_support">Поддержать</a>
+      <a href="#questions" data-i18n="nav_questions">Вопросы</a>
+    </nav>
+    <div class="language" role="group" data-i18n-aria="language_label" aria-label="Язык">
+      <button type="button" data-language="ru" lang="ru" aria-pressed="true">RU</button>
+      <button type="button" data-language="en" lang="en" aria-pressed="false">ENG</button>
+    </div>
+  </header>
+  <main>
+    <section id="about" class="hero" aria-labelledby="heroHeading">
+      <div id="pageBackground" class="hero-background" aria-hidden="true"></div>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-inner content-width">
+        <div class="hero-copy">
+          <h1 id="heroHeading" data-i18n="hero_title">Исследование криптоадресов</h1>
+          <p class="hero-description" data-i18n="hero_description">Анализ криптовалютных адресов, отслеживание движения средств, выявление связей между кошельками и атрибуция сервисов на основе данных блокчейна.</p>
+          <div class="hero-authors"><span data-i18n="authors_title">Авторы</span><a href="https://t.me/solvnox" target="_blank" rel="noopener noreferrer">@solvnox</a><a href="https://t.me/ste8n8r" target="_blank" rel="noopener noreferrer">@ste8n8r</a></div>
+          <a class="hero-link" href="#contacts" data-i18n="go_to_contacts">Где нас найти</a>
+        </div>
+      </div>
+    </section>
+    <div class="content-width page-content">
+      <section id="project" class="story section-flow" aria-labelledby="aboutHeading">
+        <div class="story-copy">
+          <h2 id="aboutHeading" data-i18n="about_title">О проекте</h2>
+          <p class="body-lead" data-i18n="about_description">Gansar помогает исследовать криптовалютные адреса, транзакции, финансовые связи и связанные Web3-объекты. Он объединяет публичные блокчейн-данные, графы, атрибуцию сервисов, NFT, Telegram Gifts и доказательства из доступных источников.</p>
+          <dl class="author-details"><div><dt data-i18n="author_main">Основной разработчик</dt><dd><a href="https://t.me/solvnox" target="_blank" rel="noopener noreferrer">@solvnox</a></dd></div><div><dt data-i18n="author_second">Второй разработчик</dt><dd><a href="https://t.me/ste8n8r" target="_blank" rel="noopener noreferrer">@ste8n8r</a></dd></div></dl>
+        </div>
+        <figure class="visual visual--story" data-media-key="gallery1" hidden><button type="button" class="media-open" data-media-open="gallery1" data-i18n-aria="media_open" aria-label="Открыть изображение"><span class="media-mount" data-media-slot="gallery1"></span></button></figure>
+      </section>
+      <section id="contacts" class="section-flow contacts" aria-labelledby="contactsHeading">
+        <h2 id="contactsHeading" data-i18n="contacts_title">Где нас найти?</h2>
+        <div class="contact-composition">
+        <div class="contact-links">
+          <a class="contact-link" href="https://t.me/solvnox_project" target="_blank" rel="noopener noreferrer"><span data-i18n="contact_channel">Наш канал</span><strong>@solvnox_project</strong><span class="link-action" data-i18n="open_telegram">Открыть в Telegram</span></a>
+          <a class="contact-link" href="https://t.me/solvnox" target="_blank" rel="noopener noreferrer"><span data-i18n="contact_personal">Моя личка в Telegram</span><strong>@solvnox</strong><span class="link-action" data-i18n="open_telegram">Открыть в Telegram</span></a>
+          <a class="contact-link" href="https://t.me/ste8n8r" target="_blank" rel="noopener noreferrer"><span data-i18n="author_second">Второй разработчик</span><strong>@ste8n8r</strong><span class="link-action" data-i18n="open_telegram">Открыть в Telegram</span></a>
+        </div>
+          <figure class="visual visual--contact" data-media-key="kiss" hidden><button type="button" class="media-open" data-media-open="kiss" data-i18n-aria="media_open" aria-label="Открыть изображение"><span class="media-mount" data-media-slot="kiss"></span></button></figure>
+        </div>
+      </section>
+      <section id="support" class="section-flow support" aria-labelledby="supportHeading">
+        <div class="section-heading"><h2 id="supportHeading" data-i18n="support_title">Поддержать проект</h2><p data-i18n="support_note">Добровольная поддержка разработки.</p></div>
+        <div class="support-grid"><article class="support-item"><div class="support-brand"><img data-crypto-logo="assets/crypto/ton.svg" alt="" width="26" height="26" hidden><label for="donationTon">TON</label></div><textarea id="donationTon" class="address mono" readonly rows="2" spellcheck="false" aria-label="TON">UQCMUP3GW7s5i0dYOKgDc0b-mr6X0JhwopbQ30YUbzTdZKPd</textarea><button type="button" class="copy-button" data-copy-target="donationTon" data-i18n="copy">Копировать</button></article><article class="support-item"><div class="support-brand"><img data-crypto-logo="assets/crypto/tron.svg" alt="" width="26" height="26" hidden><label for="donationTrx">TRX</label></div><textarea id="donationTrx" class="address mono" readonly rows="2" spellcheck="false" aria-label="TRX">TV39G71CfQcoLdFqfyzzdUHtQfBS93i3Nj</textarea><button type="button" class="copy-button" data-copy-target="donationTrx" data-i18n="copy">Копировать</button></article><article class="support-item"><div class="support-brand"><img data-crypto-logo="assets/crypto/bitcoin.svg" alt="" width="26" height="26" hidden><label for="donationBtc">BTC</label></div><textarea id="donationBtc" class="address mono" readonly rows="2" spellcheck="false" aria-label="BTC">bc1qma7vz58qpfdzpwlglszhkdekgljem7typ9hqmx</textarea><button type="button" class="copy-button" data-copy-target="donationBtc" data-i18n="copy">Копировать</button></article><article class="support-item"><div class="support-brand"><img data-crypto-logo="assets/crypto/ethereum.svg" alt="" width="26" height="26" hidden><label for="donationEth">ETH</label></div><textarea id="donationEth" class="address mono" readonly rows="2" spellcheck="false" aria-label="ETH">0xE7Fc4717d4C5143A930ca7a78B41A3B1D1c5491A</textarea><button type="button" class="copy-button" data-copy-target="donationEth" data-i18n="copy">Копировать</button></article><article class="support-item"><div class="support-brand"><img data-crypto-logo="assets/crypto/solana.svg" alt="" width="26" height="26" hidden><label for="donationSolana">Solana</label></div><textarea id="donationSolana" class="address mono" readonly rows="2" spellcheck="false" aria-label="Solana">FZae1xKXcB9CPrkf6VbUTNUcKiMmLS462NimKdr4LVFJ</textarea><button type="button" class="copy-button" data-copy-target="donationSolana" data-i18n="copy">Копировать</button></article><article class="support-item support-item--service"><div class="support-brand"><img data-crypto-logo="assets/crypto/cryptobot.svg" alt="" width="26" height="26" hidden><b>CryptoBot</b></div><a class="text-action" href="https://t.me/send?start=IVw0NCEQJkCx" target="_blank" rel="noopener noreferrer" data-i18n="open_telegram">Открыть в Telegram</a></article><article class="support-item support-item--service"><div class="support-brand"><img data-crypto-logo="assets/crypto/xrocket.svg" alt="" width="26" height="26" hidden><b>xRocket</b></div><a class="text-action" href="https://t.me/xrocket?start=inv_lXIDYUtGbhcaEGM" target="_blank" rel="noopener noreferrer" data-i18n="open_telegram">Открыть в Telegram</a></article></div>
+        <p id="copyStatus" class="copy-status" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+      <section id="questions" class="section-flow questions" aria-labelledby="faqHeading">
+        <div class="section-heading"><h2 id="faqHeading" data-i18n="faq_title">Вопросы</h2></div>
+        <div class="faq-list">
+<details class="faq-item"><summary data-i18n="faq_what_q">Что такое Gansar?</summary><div class="faq-body"><p data-i18n="faq_what_a">Это локальный инструмент для исследования криптоадресов и связанных с ними операций, сервисов и Web3-активов. Результат собирается в интерактивный HTML-отчёт.</p></div></details>
+<details class="faq-item"><summary data-i18n="faq_networks_q">Какие сети поддерживаются?</summary><div class="faq-body"><p data-i18n="faq_networks_a">TON, TRON, Ethereum, BNB Chain, Bitcoin, Solana, Dogecoin, Polygon, Arbitrum, Optimism и Avalanche. Возможности и покрытие источников различаются. Basenames разрешает имена Base, но полноценный сбор финансовой истории Base пока не реализован.</p></div></details>
+<details class="faq-item"><summary data-i18n="faq_sources_q">Какие данные использует Gansar?</summary><div class="faq-body"><p data-i18n="faq_sources_a">Gansar анализирует криптовалютные адреса в различных блокчейн-сетях, собирая доступную историю транзакций, переводы средств, взаимодействия с другими кошельками, смарт-контракты и движение активов.
+
+Особое внимание уделяется экосистеме TON: взаимодействиям с Crypto Bot и xRocket, NFT, коллекционным Telegram-юзернеймам, Telegram Gifts и истории их владения.
+
+Инструмент сопоставляет данные нескольких источников, выявляет финансовые связи, контрагентов и известные сервисы. Все полученные сведения объединяются в единое расследование с возможностью проверки исходных данных.</p></div></details>
+<details class="faq-item"><summary data-i18n="faq_explorer_q">Чем Gansar отличается от обычного блокчейн-эксплорера?</summary><div class="faq-body"><p data-i18n="faq_explorer_a">Gansar ориентирован на глубокий анализ криптовалютных адресов с особым акцентом на блокчейн TON. Инструмент исследует историю транзакций, движение средств, связи между кошельками, взаимодействия с @xRocket и @CryptoBot, а также NFT, коллекционные Telegram-юзернеймы и Telegram Gifts.
+
+В отличие от обычного эксплорера, Gansar объединяет доступные данные из нескольких источников и проводит максимально глубокий анализ одного адреса, представляя результаты через интерактивный 2D-граф, пространственный 3D-граф и подробное дерево транзакций. Это позволяет изучать не только отдельные операции, но и общую структуру финансовых связей, активов и взаимодействий с сервисами.</p></div></details>
+<details class="faq-item"><summary data-i18n="faq_accuracy_q">Насколько точны результаты?</summary><div class="faq-body"><p data-i18n="faq_accuracy_a">Полнота зависит от доступности и покрытия источников. Подтверждённое состояние, сообщение провайдера и аналитическое предположение различаются. Профиль, имя или аватарка сами по себе не устанавливают личность владельца кошелька.</p></div></details>
+<details class="faq-item"><summary data-i18n="faq_emma_q">Почему на странице Эмма Уотсон?</summary><div class="faq-body"><div class="faq-personal"><p data-i18n="faq_emma_a">Эмма Уотсон — мой личный источник вдохновения. Она занимает особое место в моей жизни и мотивирует меня развиваться, создавать новое и работать над своими проектами. Поэтому её образ стал частью Gansar.</p><figure class="visual visual--faq" data-media-key="motion2" hidden><button type="button" class="media-open" data-media-open="motion2" data-i18n-aria="media_open" aria-label="Открыть изображение"><span class="media-mount" data-media-slot="motion2"></span></button></figure></div></div></details>
+</div>
+      </section>
+    </div>
+  </main>
+  <footer class="page-footer content-width"><a class="brand" href="#about" aria-label="Gansar">GANSAR</a><a href="https://t.me/solvnox_project" target="_blank" rel="noopener noreferrer">@solvnox_project</a></footer>
+  <noscript><p class="noscript-note content-width">Для переключения языка, копирования и просмотра локальных медиа включите JavaScript. / Enable JavaScript for language switching, copying and local media.</p></noscript>
+  <dialog id="mediaDialog" class="media-dialog" aria-labelledby="mediaDialogTitle">
+    <div class="dialog-toolbar"><span id="mediaDialogTitle"></span><button id="closeMedia" type="button" data-i18n="close" data-i18n-aria="close_preview" aria-label="Закрыть просмотр">Закрыть</button></div>
+    <img id="dialogImage" alt="" hidden>
+    <video id="dialogVideo" controls muted loop playsinline preload="metadata" hidden></video>
+  </dialog>
+</body>
+</html>

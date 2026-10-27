@@ -1,0 +1,21 @@
+{
+  "kind": "SEALED_ACTUAL_SAVED_DEEP_TAIL_REGRESSION_SAMPLE",
+  "new_api_requests": 0,
+  "source_pickle": "validation/continuous_deep/live_domain_release_verified/cases/domain-resume-final/.search_sessions/b5c9d88f95634c549dbe5b38a323bb8f/job_0.pickle",
+  "event_id": "ton:action:P/xmJttMDHQQD4a6tF2Zoi/ZSw7c1gsH1vcAu6GeiHA=:ton_transfer",
+  "target_address": "0:455024810caef5d106159c1a1c7decc336f3bbc7198bac97409cb13cc1c88c17",
+  "samples": {
+    "actual_deep_tail_envelope": {
+      "path": "validation/continuous_deep/live_domain_release_verified/recovery_audit/actual_deep_tail_envelope.json.gz",
+      "uncompressed_bytes": 2389063,
+      "sha256": "770c1315293afd9d01ec05ef34cb4fb281e83554f5bc1c50f75fb74b8dcb8909",
+      "compressed_bytes": 38608
+    },
+    "actual_deep_tail_transaction": {
+      "path": "validation/continuous_deep/live_domain_release_verified/recovery_audit/actual_deep_tail_transaction.json.gz",
+      "uncompressed_bytes": 19531671,
+      "sha256": "d82c29b9f4149ee577f4eb3b3c2f95077bd11f7f603b3148d6a25593fbe3c39f",
+      "compressed_bytes": 307220
+    }
+  }
+}

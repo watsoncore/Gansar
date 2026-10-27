@@ -1,0 +1,19 @@
+# Bundled service artwork
+
+These unmodified assets identify a named service claim in an investigation report. They do not establish a signing application, a person, account ownership, confidence, endorsement, or a relationship with GANSAR. An UNKNOWN claim has no logo.
+
+Only the server-side manifest allowlist is used. Provider image fields are ignored. Files are checked against pinned SHA-256 values and embedded into the existing HTML so opening a report does not fetch these logos from the network.
+
+| Asset | Official origin | Permission / attribution |
+| --- | --- | --- |
+| `tonkeeper.svg` | [Tonkeeper UI kit, pinned commit](https://github.com/tonkeeper/tonkeeper-web/blob/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/ui-kit/src/icons/svg/ic-logo.svg) | Apache-2.0, full license in `TONKEEPER-LICENSE.txt`. Original copyright and trademark rights remain with their owners. |
+| `xrocket.png` | [xRocket official favicon](https://xrocket.exchange/img/favicon-32x32.png) | Official [brand kit](https://xrocket.exchange/brand-kit) supplies resources and usage guidance. The icon is unchanged, proportionally scaled, without added outline, shadow, or picture frame. No broader copyright or trademark license is claimed. |
+| `bybit.png` | [Bybit official press Brand Assets wordmark](https://www.bybit.global/en/press) | The press page offers the official wordmark for use on light/dark backgrounds. The published PNG is unchanged, rendered proportionally. Trademark rights remain with Bybit; no endorsement or broader license is claimed. |
+| `tether.svg` | [Tether official media circular logo](https://tether.to/images/logoCircle.svg) | Conditional accurate referential use under [official trademark guidance](https://tether.to/en/media/); unmodified artwork, no endorsement. See `TETHER-GUIDANCE.md`. Restricted to explicit service claims, never automatically applied to token holders. |
+| `openmask.png` | [OpenMask official repository, pinned original PNG](https://github.com/OpenProduct/openmask-extension/blob/9150d57d530296f8b27ae59e4dfce865be81550e/public/openmask-logo-288.png) | Unmodified GPL-3.0 repository artwork, an independent asset aggregate; full `OPENMASK-LICENSE.txt`, source and SHA are retained. Used reports include the full licence notice locally. It does not imply endorsement or establish use of OpenMask. |
+
+The manifest records source URLs, observation time, license/guidance and content hashes. Artwork permissions were assessed separately from address attribution evidence.
+
+No artwork is bundled for CryptoBot, Wallet in Telegram / Walt, TON Space, MyTonWallet, Tonhub, Getgems, STON.fi or DeDust. A text-only claim remains available where evidence supports it. As of 2026-10-16, the official CryptoBot page did not expose an affirmative reusable artwork license in the checked material; `help.send.tg` was inaccessible (403). Wallet's official site redirected to [Walt](https://walt.io/), whose [user agreement](https://walt.io/docs/user_agreement) retains its intellectual property and does not provide general redistribution permission. MyTonWallet and Tonhub repository licensing was not treated as a blanket artwork redistribution grant. This is an asset-selection decision, not an assertion that permission cannot be obtained.
+
+Uniswap remains text-only because its [official trademark policy](https://support.uniswap.org/hc/en-us/articles/30934762216973-Uniswap-Labs-Trademark-Guidelines) requires written permission for logos, separately from source-code licensing. Solana service claims also remain text-only: its [brand page and linked full guidelines](https://solana.com/branding) restrict mark combination and scale changes; no additional service badge artwork was inferred from an open-source license. Existing network markers remain distinct from service attribution.

@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "observed_utc": "2026-10-26T14:41:43.728946+00:00",
+  "purpose": "About page donation method identifiers",
+  "trademark_note": "No endorsement, affiliation, ownership or independent trademark licence is asserted.",
+  "runtime_external_requests": false,
+  "assets": {
+    "ton": {
+      "file": "ton.svg",
+      "status": "bundled",
+      "source_url": "https://ton.org/assets/favicon.svg",
+      "method": "unchanged native SVG",
+      "bytes": 521,
+      "sha256": "5359da625dfd94a718a190203dd9e03032e1fcfc03fb69652088d6fc45b870e9",
+      "safety": {
+        "safe": true,
+        "elements": 3,
+        "embedded_pngs": 0,
+        "viewBox": "0 0 86 86",
+        "script_or_external_requests": false
+      }
+    },
+    "tron": {
+      "file": "tron.svg",
+      "status": "bundled",
+      "source_url": "https://tron.network/static/doc/%E6%A0%87%E5%BF%97%E4%B8%8E%E5%9B%BE%E5%BD%A2%E6%8C%87%E5%8D%97.zip",
+      "method": "unchanged native SVG",
+      "bytes": 657,
+      "sha256": "e33579f20c5ecbc0e9d6008ae4e496cc6cb510edd8ea3e46b37759b7a16ba067",
+      "safety": {
+        "safe": true,
+        "elements": 5,
+        "embedded_pngs": 0,
+        "viewBox": "0 0 408.69 410.37",
+        "script_or_external_requests": false
+      },
+      "archive_member": "TRON LOGO - SVG/LOGO ICON/TRON LOGO ICON RED.svg",
+      "nested_archive_sha256": "9c1353a962fc74070604cfc00443ad1ba9bf4afc2c79a86ac7f82c65f7e27701",
+      "original_white_background_preserved": true,
+      "archive_saved": false
+    },
+    "bitcoin": {
+      "file": "bitcoin.svg",
+      "status": "bundled",
+      "source_url": "https://bitcoin.design/assets/images/guide/getting-started/visual-language/bitcoin-symbol.svg",
+      "method": "unchanged native SVG",
+      "bytes": 2028,
+      "sha256": "a772587201b7603cc316fc28fbd974d07bf47d22d0e4a25d8f076d7900f3469b",
+      "safety": {
+        "safe": true,
+        "elements": 5,
+        "embedded_pngs": 0,
+        "viewBox": "0 0 144 145",
+        "script_or_external_requests": false
+      }
+    },
+    "solana": {
+      "file": "solana.svg",
+      "status": "bundled",
+      "source_url": "https://solana.com/src/img/branding/solanaLogoMark.svg",
+      "method": "unchanged native SVG",
+      "bytes": 2519,
+      "sha256": "3d3401109aa061dec40a8659f1847817a8e647f98de1e65e76e86a95bbe1f08a",
+      "safety": {
+        "safe": true,
+        "elements": 10,
+        "embedded_pngs": 0,
+        "viewBox": "0 0 101 88",
+        "script_or_external_requests": false
+      }
+    },
+    "xrocket": {
+      "file": "xrocket.svg",
+      "status": "bundled",
+      "source_url": "https://xrocket.exchange/img/favicon-32x32.png",
+      "method": "SVG container embedding the unchanged official PNG; not traced or vectorized",
+      "bytes": 1395,
+      "sha256": "293ccfc8ed3dbeb543dadeab00a7d2a61f3c0f16431f90bcaf540c78b267b6fb",
+      "safety": {
+        "safe": true,
+        "elements": 2,
+        "embedded_pngs": 1,
+        "viewBox": "0 0 32 32",
+        "script_or_external_requests": false
+      },
+      "embedded_png_sha256": "cb7ae34f1233e7065981274218742300fb89a3fa6aa59b71899aacd296073a3f",
+      "embedded_png_bytes": 906,
+      "original_dimensions": [
+        32,
+        32
+      ],
+      "vector_artwork": false
+    },
+    "ethereum": {
+      "file": "ethereum.svg",
+      "status": "absent_text_fallback",
+      "source_url": "https://ethereum.org/assets/",
+      "reason": "Official terms distinguish CC-BY-4.0 non-code content from trademarks requiring prior written permission; no separate applicable permission was confirmed.",
+      "terms_url": "https://ethereum.org/terms-of-use"
+    },
+    "cryptobot": {
+      "file": "cryptobot.svg",
+      "status": "absent_text_fallback",
+      "source_url": "https://send.tg",
+      "reason": "Official service identity verified; an applicable reusable artwork permission was not confirmed in checked official resources. User raster remains unchanged, not republished as a newly licensed SVG.",
+      "official_identity_url": "https://help.send.tg/en/articles/9820327-links-to-official-resources"
+    }
+  }
+}

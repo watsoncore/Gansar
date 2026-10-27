@@ -1,0 +1,95 @@
+{
+  "fixture_kind": "Replay of actual public Easscan response; not a fresh integration request",
+  "captured_at": "2026-10-26T06:50:24.680592+00:00",
+  "source": "https://easscan.org/graphql",
+  "response": {
+    "data": {
+      "attestations": [
+        {
+          "id": "0x3c0c5532534b8f6a39f929e5769688b750e1c5c99f01fe8bee3d39a169082c74",
+          "attester": "0x458Aa8Eb5D673D6f9bAe964aF2c25d64f4a19878",
+          "recipient": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          "schemaId": "0x9f0d1948e9441478677bc521dcc8372ad8687c7570413738f69ed73315f9eb5d",
+          "time": 1790816867,
+          "expirationTime": 0,
+          "revocationTime": 0,
+          "revoked": false,
+          "txid": "0x2b85c1a3f0d55100c45fb3911b176404fea23498f13e5ae307bb52fc839aa770",
+          "isOffchain": false,
+          "data": "0x000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000640000000000000000000000000000000000000000000000000000000000000000",
+          "decodedDataJson": "[{\"name\":\"comment\",\"type\":\"string\",\"signature\":\"string comment\",\"value\":{\"name\":\"comment\",\"type\":\"string\",\"value\":\"\"}},{\"name\":\"confidence\",\"type\":\"uint256\",\"signature\":\"uint256 confidence\",\"value\":{\"name\":\"confidence\",\"type\":\"uint256\",\"value\":{\"type\":\"BigNumber\",\"hex\":\"0x64\"}}}]",
+          "schema": {
+            "id": "0x9f0d1948e9441478677bc521dcc8372ad8687c7570413738f69ed73315f9eb5d",
+            "schema": "string comment,uint256 confidence",
+            "creator": "0x5885B93aABeD8FA8BC56E2aB6cC38127EC77e834",
+            "resolver": "0xB60f400d7c2284c77809d6d8C22F4E2ac9C50FBa",
+            "revocable": true
+          }
+        },
+        {
+          "id": "0xb23684df3824b460bc4295b77ab68bc609f35079b05a8d3e6a27a20130177b07",
+          "attester": "0xE408D65d495c567aB246E7c90F11d15d96c1738D",
+          "recipient": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          "schemaId": "0x3969bb076acfb992af54d51274c5c868641ca5344e1aacd0b1f5e4f80ac0822f",
+          "time": 1720752011,
+          "expirationTime": 0,
+          "revocationTime": 0,
+          "revoked": false,
+          "txid": "0x6b3a318309539e491e6ec60fa33d6b88724e0f722fc17072722c7616440ab3e8",
+          "isOffchain": false,
+          "data": "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002474e000000000000000000000000000000000000000000000000000000000000",
+          "decodedDataJson": "[{\"name\":\"message\",\"type\":\"string\",\"signature\":\"string message\",\"value\":{\"name\":\"message\",\"type\":\"string\",\"value\":\"GN\"}}]",
+          "schema": {
+            "id": "0x3969bb076acfb992af54d51274c5c868641ca5344e1aacd0b1f5e4f80ac0822f",
+            "schema": "string message",
+            "creator": "0x2bF22CAe1dc34f265cAE03F6ff419177b4f4FBb3",
+            "resolver": "0x0000000000000000000000000000000000000000",
+            "revocable": true
+          }
+        },
+        {
+          "id": "0x308d2f2cefc2a90f31e34bedd7cea3e9287d9eba1b21aceb0da39226c2b368d9",
+          "attester": "0x073Ab1C0CAd3677cDe9BDb0cDEEDC2085c029579",
+          "recipient": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          "schemaId": "0x20351f973fdec1478924c89dfa533d8f872defa108d9c3c6512267d7e7e5dbc2",
+          "time": 1695164195,
+          "expirationTime": 0,
+          "revocationTime": 0,
+          "revoked": false,
+          "txid": "0x540d3eb2d155c06975a805d008198e8aa2b80f6d8a4733dd472ef9efac60e226",
+          "isOffchain": false,
+          "data": "0x19452ed8cb5f91f916c719302e55ebc167ff7c49f4aeb232530ec077099eec3e",
+          "decodedDataJson": "[{\"name\":\"privateData\",\"type\":\"bytes32\",\"signature\":\"bytes32 privateData\",\"value\":{\"name\":\"privateData\",\"type\":\"bytes32\",\"value\":\"0x19452ed8cb5f91f916c719302e55ebc167ff7c49f4aeb232530ec077099eec3e\"}}]",
+          "schema": {
+            "id": "0x20351f973fdec1478924c89dfa533d8f872defa108d9c3c6512267d7e7e5dbc2",
+            "schema": "bytes32 privateData",
+            "creator": "0x0fb166cDdF1387C5b63fFa25721299fD7b068f3f",
+            "resolver": "0x0000000000000000000000000000000000000000",
+            "revocable": true
+          }
+        },
+        {
+          "id": "0x4fe9e35fedd832ffc5cf92945e35fff3e24b379de285d31670e0e5b55882b66c",
+          "attester": "0xe55CfCB15cD718C1Ca7bB52B90370EAB7E114f7A",
+          "recipient": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          "schemaId": "0xf58b8b212ef75ee8cd7e8d803c37c03e0519890502d5e99ee2412aae1456cafe",
+          "time": 1694469887,
+          "expirationTime": 0,
+          "revocationTime": 0,
+          "revoked": false,
+          "txid": "0xf7870cabea3de553d93a2d4c780db396cfd483a9fd9b49b0855b64cee1d24488",
+          "isOffchain": false,
+          "data": "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000105468697320697320617765736f6d652100000000000000000000000000000000",
+          "decodedDataJson": "[{\"name\":\"statement\",\"type\":\"string\",\"signature\":\"string statement\",\"value\":{\"name\":\"statement\",\"type\":\"string\",\"value\":\"This is awesome!\"}}]",
+          "schema": {
+            "id": "0xf58b8b212ef75ee8cd7e8d803c37c03e0519890502d5e99ee2412aae1456cafe",
+            "schema": "string statement",
+            "creator": "0x2bF22CAe1dc34f265cAE03F6ff419177b4f4FBb3",
+            "resolver": "0x0000000000000000000000000000000000000000",
+            "revocable": true
+          }
+        }
+      ]
+    }
+  }
+}

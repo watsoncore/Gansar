@@ -1,0 +1,10 @@
+{
+  "image": "",
+  "video": "",
+  "overlay_opacity": 0.72,
+  "blur": 0,
+  "vignette": 0.84,
+  "grid_opacity": 0.05,
+  "animated": true,
+  "gradient": "radial-gradient(circle at 50% 12%, rgba(99,183,120,.12), transparent 34%), linear-gradient(180deg, rgba(5,8,7,.94), rgba(2,3,3,1) 620px)"
+}

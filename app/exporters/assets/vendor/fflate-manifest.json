@@ -1,0 +1,18 @@
+{
+  "package": "fflate",
+  "version": "0.8.3",
+  "source": "https://registry.npmjs.org/fflate/0.8.3",
+  "tarball_integrity": "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==",
+  "license": "MIT",
+  "used_API": "gunzipSync only; inline offline decoding",
+  "files": {
+    "fflate-0.8.3.min.js": {
+      "bytes": 33044,
+      "sha256": "462ef8041fc970e3615a20a9dd2b2e3047a073b2da729ef4f02b634bba8b7b83"
+    },
+    "FFLATE-LICENSE.txt": {
+      "bytes": 1069,
+      "sha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551"
+    }
+  }
+}

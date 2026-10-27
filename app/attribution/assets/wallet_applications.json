@@ -1,0 +1,749 @@
+{
+  "schema_version": "1.0",
+  "research_scope": "Documented indicators, not exclusive app identities",
+  "entities": [
+    {
+      "entity_id": "tonkeeper",
+      "brand": "Tonkeeper",
+      "entity_type": "signing_application",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "tonkeeper_query_id_namespace",
+        "ttl_300_seconds",
+        "standard_v3_v4_v5"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE.txt",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/LICENSE.txt",
+          "sha256": "c7dd1f9f82e5edf288f1312cd3277050e42282f23f0e5a2267a55e5685b1d131"
+        },
+        {
+          "path": "packages/uikit/src/hooks/blockchain/useSendTransfer.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/uikit/src/hooks/blockchain/useSendTransfer.ts",
+          "sha256": "4d21b82f8ef3d311616bcb7374509dfc66b80ab8cdfdd629c48bcd2426715021"
+        },
+        {
+          "path": "packages/uikit/src/hooks/blockchain/useSendMultiTransfer.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/uikit/src/hooks/blockchain/useSendMultiTransfer.ts",
+          "sha256": "4c21c329ca8e40f6e44f15cb8bb59b71168741ea3b29568b2456b68fcfef85b3"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/sender/wallet-message-sender.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/sender/wallet-message-sender.ts",
+          "sha256": "5b96d2e866594247036b62dcc3773815fdb424e6cc045077f50e0a5b386f3a62"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/sender/battery-message-sender.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/sender/battery-message-sender.ts",
+          "sha256": "779285d85d5176383f7b53208dfdb2cab0f52862009290a0c4e3aff49aa11b09"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/encoder/nft-encoder.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/encoder/nft-encoder.ts",
+          "sha256": "70ff8bfce805cacd257e236a12589ef7fef2af1d374ba3c0b9aad1d311b89db4"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/utils.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/utils.ts",
+          "sha256": "d4d8a7530596dcd5c023078b0dacc38ad32b70b438f372b45ee2d502135c2378"
+        }
+      ],
+      "source_commit": "d7ea32150635b53b8bc6fb6c5744434d9370a347",
+      "source_dates": [
+        "2026-10-16T20:39:22.396821+00:00"
+      ],
+      "independence_groups": [
+        "tonkeeper"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "last_verified": "2026-10-16T20:39:22.396821+00:00",
+      "limitations": [
+        "Query namespace is copyable and can originate in a dApp payload. TTL is configurable."
+      ]
+    },
+    {
+      "entity_id": "mytonwallet",
+      "brand": "MyTonWallet",
+      "entity_type": "signing_application",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "ttl_600_seconds",
+        "standard_v1_v5",
+        "wallet_tg_import",
+        "mywallet_fee_opcode"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/mytonwallet-org/mytonwallet/bb3f357690633d274e390e799babaf1d642b31de/LICENSE",
+          "sha256": "84b0436a1768193feaf8d39f01d79895c5ba8738f89a0e846efaae8afd1c2137"
+        },
+        {
+          "path": "src/api/chains/ton/transfer.ts",
+          "url": "https://raw.githubusercontent.com/mytonwallet-org/mytonwallet/bb3f357690633d274e390e799babaf1d642b31de/src/api/chains/ton/transfer.ts",
+          "sha256": "f18d94bf85a1a109d330e89dd8726cf6bf71bd1290e38e8a34af4ca60d33e190"
+        },
+        {
+          "path": "src/api/chains/ton/wallet.ts",
+          "url": "https://raw.githubusercontent.com/mytonwallet-org/mytonwallet/bb3f357690633d274e390e799babaf1d642b31de/src/api/chains/ton/wallet.ts",
+          "sha256": "7021cc2a5076cae50027ff9aed5975497b60f0b450c68a5e4630baca8c2ae66d"
+        },
+        {
+          "path": "src/api/chains/ton/constants.ts",
+          "url": "https://raw.githubusercontent.com/mytonwallet-org/mytonwallet/bb3f357690633d274e390e799babaf1d642b31de/src/api/chains/ton/constants.ts",
+          "sha256": "f02d4f7a1a71f88065ee9ba6f27176e2ab5c2bc80d8470914bfc5ffc0f07f813"
+        },
+        {
+          "path": "src/api/chains/ton/contracts/TelegramWallet.ts",
+          "url": "https://raw.githubusercontent.com/mytonwallet-org/mytonwallet/bb3f357690633d274e390e799babaf1d642b31de/src/api/chains/ton/contracts/TelegramWallet.ts",
+          "sha256": "28b9cafebf9174c4b2453969909ccb7c057fea306cba755facf476709a3a2f2e"
+        },
+        {
+          "path": "src/api/chains/ton/util/tonCore.ts",
+          "url": "https://raw.githubusercontent.com/mytonwallet-org/mytonwallet/bb3f357690633d274e390e799babaf1d642b31de/src/api/chains/ton/util/tonCore.ts",
+          "sha256": "7b29fbadbe8bd80cc2412b215f84a348be7aaf53a2930e6ebab21fa1ecb43888"
+        }
+      ],
+      "source_commit": "bb3f357690633d274e390e799babaf1d642b31de",
+      "source_dates": [
+        "2026-10-16T20:39:22.397248+00:00"
+      ],
+      "independence_groups": [
+        "mytonwallet-org"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "other",
+        "name": "Other",
+        "spdx_id": "NOASSERTION",
+        "url": null,
+        "node_id": "MDc6TGljZW5zZTA="
+      },
+      "last_verified": "2026-10-16T20:39:22.397248+00:00",
+      "limitations": [
+        "Source available licence; facts researched without copying runtime implementation. Defaults and fee markers are not exclusive signing proof."
+      ]
+    },
+    {
+      "entity_id": "tonhub",
+      "brand": "Tonhub",
+      "entity_type": "signing_application",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "shared_ton_sdk",
+        "standard_v4_v5",
+        "sendmode_3"
+      ],
+      "evidence_sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/tonwhales/wallet/a2503f79d14868d65349ad7035d18389c6e2f996/README.md",
+          "sha256": "59da82be7e3db101c4a8f72ee2b4e618ba6db87f9edaa5b9f939dd87f0a4c74b"
+        },
+        {
+          "path": "app/engine/hooks/accounts/useWalletV4.ts",
+          "url": "https://raw.githubusercontent.com/tonwhales/wallet/a2503f79d14868d65349ad7035d18389c6e2f996/app/engine/hooks/accounts/useWalletV4.ts",
+          "sha256": "2e126ba7a179edfe359a028c6bd7cd8da127a3e03408613d8ab34eb4c6021e92"
+        },
+        {
+          "path": "app/fragments/secure/simpleTransfer/hooks/useSimpleTransfer.tsx",
+          "url": "https://raw.githubusercontent.com/tonwhales/wallet/a2503f79d14868d65349ad7035d18389c6e2f996/app/fragments/secure/simpleTransfer/hooks/useSimpleTransfer.tsx",
+          "sha256": "3f397c539f569f468936b74146ef05a9531ca4e390d146a63b4aea7226214097"
+        },
+        {
+          "path": "app/fragments/secure/transfer/TransferFragment.tsx",
+          "url": "https://raw.githubusercontent.com/tonwhales/wallet/a2503f79d14868d65349ad7035d18389c6e2f996/app/fragments/secure/transfer/TransferFragment.tsx",
+          "sha256": "da744b380ef2459a2e5fbcef0dc369610053664da88143eb16fb8a4459ab50e4"
+        }
+      ],
+      "source_commit": "a2503f79d14868d65349ad7035d18389c6e2f996",
+      "source_dates": [
+        "2026-10-16T20:39:22.397832+00:00"
+      ],
+      "independence_groups": [
+        "tonwhales"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": null,
+      "last_verified": "2026-10-16T20:39:22.397832+00:00",
+      "limitations": [
+        "Repository metadata exposes no licence; research-only references, no code/logo copied."
+      ]
+    },
+    {
+      "entity_id": "openmask",
+      "brand": "OpenMask",
+      "entity_type": "signing_application",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "standard_v2_v3_v4",
+        "sendmode_3",
+        "ttl_60_seconds",
+        "timestamp_query_id"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/OpenProduct/openmask-extension/9150d57d530296f8b27ae59e4dfce865be81550e/LICENSE",
+          "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+        },
+        {
+          "path": "src/libs/service/transfer/core.ts",
+          "url": "https://raw.githubusercontent.com/OpenProduct/openmask-extension/9150d57d530296f8b27ae59e4dfce865be81550e/src/libs/service/transfer/core.ts",
+          "sha256": "7dd9beca270291fdef716b833351a5a68ce6112c1ff05f85e5a53535dd9b018d"
+        },
+        {
+          "path": "src/libs/service/transfer/tonService.ts",
+          "url": "https://raw.githubusercontent.com/OpenProduct/openmask-extension/9150d57d530296f8b27ae59e4dfce865be81550e/src/libs/service/transfer/tonService.ts",
+          "sha256": "4bee3befe939e2cbc1afb76169c2df59b5424955f7befd80efa3200a935551d8"
+        },
+        {
+          "path": "src/libs/service/transfer/nftService.ts",
+          "url": "https://raw.githubusercontent.com/OpenProduct/openmask-extension/9150d57d530296f8b27ae59e4dfce865be81550e/src/libs/service/transfer/nftService.ts",
+          "sha256": "c3f4315494ca6f1cb81544baeab2e37f625292fa4d8035963213740929ebf22e"
+        }
+      ],
+      "source_commit": "9150d57d530296f8b27ae59e4dfce865be81550e",
+      "source_dates": [
+        "2026-10-16T20:39:25.498318+00:00"
+      ],
+      "independence_groups": [
+        "OpenProduct"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "gpl-3.0",
+        "name": "GNU General Public License v3.0",
+        "spdx_id": "GPL-3.0",
+        "url": "https://api.github.com/licenses/gpl-3.0",
+        "node_id": "MDc6TGljZW5zZTk="
+      },
+      "last_verified": "2026-10-16T20:39:25.498318+00:00",
+      "limitations": [
+        "GPL source researched, no upstream implementation incorporated. Public layouts are standards/shared SDK."
+      ]
+    },
+    {
+      "entity_id": "wallet_tg",
+      "brand": "WalletTg",
+      "entity_type": "wallet_implementation",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [
+        {
+          "algorithm": "TON cell representation SHA256",
+          "code_hash": "9149ae51c1e4689710cebf7830297b16acfbadb363a920a537893e7ffeeca768"
+        }
+      ],
+      "verified_technical_indicators": [
+        "trampoline_code_hash",
+        "config_minus123",
+        "seqno_header",
+        "key_rotation"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/ton-blockchain/tg-wallet-contract/1a29ae5d90e03c3d585d3e42e6ecef691d727a3c/LICENSE",
+          "sha256": "f668e6538d3e3bddf985af87f9b74fd6da1784115395157ea2f70d6c7aab439d"
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/ton-blockchain/tg-wallet-contract/1a29ae5d90e03c3d585d3e42e6ecef691d727a3c/README.md",
+          "sha256": "7fd62c1b58e75f65515069466e850425957ca9a2c23373f848e04e1957984dfc"
+        },
+        {
+          "path": "contracts/WalletTrampoline.boc",
+          "url": "https://raw.githubusercontent.com/ton-blockchain/tg-wallet-contract/1a29ae5d90e03c3d585d3e42e6ecef691d727a3c/contracts/WalletTrampoline.boc",
+          "sha256": "19ec9e8bc64615da5edda931215dde125e7f9feda2178e558d4e4d2d71abf57f"
+        },
+        {
+          "path": "contracts/WalletTrampoline.fif",
+          "url": "https://raw.githubusercontent.com/ton-blockchain/tg-wallet-contract/1a29ae5d90e03c3d585d3e42e6ecef691d727a3c/contracts/WalletTrampoline.fif",
+          "sha256": "89f844e9708ada6f024b22a5f685801caa4e5a9bd2ca9121738c01aab07be9ca"
+        },
+        {
+          "path": "contracts/WalletTg/messages.tolk",
+          "url": "https://raw.githubusercontent.com/ton-blockchain/tg-wallet-contract/1a29ae5d90e03c3d585d3e42e6ecef691d727a3c/contracts/WalletTg/messages.tolk",
+          "sha256": "e526fac7f5405042c72111b0c46ec476009856e093b158f1012c221e687777ed"
+        },
+        {
+          "path": "contracts/WalletTg/storage.tolk",
+          "url": "https://raw.githubusercontent.com/ton-blockchain/tg-wallet-contract/1a29ae5d90e03c3d585d3e42e6ecef691d727a3c/contracts/WalletTg/storage.tolk",
+          "sha256": "5fa02f500b650f0df38bf221fb60d3ec282d87a88e7b131852505172b132c0de"
+        }
+      ],
+      "source_commit": "1a29ae5d90e03c3d585d3e42e6ecef691d727a3c",
+      "source_dates": [
+        "2026-10-16T20:39:27.766110+00:00"
+      ],
+      "independence_groups": [
+        "ton-blockchain"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "last_verified": "2026-10-16T20:39:27.766110+00:00",
+      "limitations": [
+        "Implementation can be imported/operated by MyTonWallet and other clients; Telegram origin does not prove current signer or custody."
+      ]
+    },
+    {
+      "entity_id": "ton_connect",
+      "brand": "TON Connect",
+      "entity_type": "connection_protocol",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "off_chain_device_info",
+        "shared_send_transaction_request"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/ton-connect/sdk/04f67c7f0a22a01cdadf4cd7a1634945988cb4ec/LICENSE",
+          "sha256": "c7a88f87eea15cea1f3fcd7b6888dfe326df9e5f54875eaa5047392a7772b09c"
+        },
+        {
+          "path": "packages/protocol/src/models/device-info.ts",
+          "url": "https://raw.githubusercontent.com/ton-connect/sdk/04f67c7f0a22a01cdadf4cd7a1634945988cb4ec/packages/protocol/src/models/device-info.ts",
+          "sha256": "442f51ac661407cc436947c16fbd900778d3240bccc342c40ff01642ddb66a9a"
+        },
+        {
+          "path": "packages/protocol/src/models/app-message/request/send-transaction-rpc-request.ts",
+          "url": "https://raw.githubusercontent.com/ton-connect/sdk/04f67c7f0a22a01cdadf4cd7a1634945988cb4ec/packages/protocol/src/models/app-message/request/send-transaction-rpc-request.ts",
+          "sha256": "157c0ccbaa510f24acb1ee3ffa19f18761adfd2dfe61c22c6ad77a902929aa2f"
+        },
+        {
+          "path": "packages/sdk/src/models/methods/send-transaction/send-transaction-request.ts",
+          "url": "https://raw.githubusercontent.com/ton-connect/sdk/04f67c7f0a22a01cdadf4cd7a1634945988cb4ec/packages/sdk/src/models/methods/send-transaction/send-transaction-request.ts",
+          "sha256": "91217bb6a09deb8331013cee7c4888911a1e2cbf5dca4141c26cf19cd360fbde"
+        }
+      ],
+      "source_commit": "04f67c7f0a22a01cdadf4cd7a1634945988cb4ec",
+      "source_dates": [
+        "2026-10-16T20:39:25.515276+00:00"
+      ],
+      "independence_groups": [
+        "ton-connect"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "last_verified": "2026-10-16T20:39:25.515276+00:00",
+      "limitations": [
+        "appName/device are session metadata; ton_proof verifies key/domain binding rather than app binary."
+      ]
+    },
+    {
+      "entity_id": "ton_sdk",
+      "brand": "@ton/ton",
+      "entity_type": "sdk",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "v1_v5_signed_headers",
+        "sendmode_3",
+        "ttl_60_seconds"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/ton-org/ton/311dc3313dd31e44781551b398b92256518b2c61/LICENSE",
+          "sha256": "1991e3a57209e7b7fb8ea13eb6e3c8ba77a41084c3d98ead635965142f20b126"
+        },
+        {
+          "path": "src/wallets/signing/createWalletTransfer.ts",
+          "url": "https://raw.githubusercontent.com/ton-org/ton/311dc3313dd31e44781551b398b92256518b2c61/src/wallets/signing/createWalletTransfer.ts",
+          "sha256": "2e955bb4d44e52eb8f8e27b1049fe682b0cb6b1f7ef8fae1e2cc309f3510d81e"
+        },
+        {
+          "path": "src/wallets/v5r1/WalletContractV5R1.ts",
+          "url": "https://raw.githubusercontent.com/ton-org/ton/311dc3313dd31e44781551b398b92256518b2c61/src/wallets/v5r1/WalletContractV5R1.ts",
+          "sha256": "e3280ed12e1f96a146eb13eaf48e0b441432785937702aec30096024bd73c637"
+        },
+        {
+          "path": "src/wallets/v4/WalletContractV4.ts",
+          "url": "https://raw.githubusercontent.com/ton-org/ton/311dc3313dd31e44781551b398b92256518b2c61/src/wallets/v4/WalletContractV4.ts",
+          "sha256": "e9091c6bc638f8b5d4a1c4dc5246d8fc0e072233395488e2451dfc885eeceaba"
+        },
+        {
+          "path": "src/wallets/v3/r2.ts",
+          "url": "https://raw.githubusercontent.com/ton-org/ton/311dc3313dd31e44781551b398b92256518b2c61/src/wallets/v3/r2.ts",
+          "sha256": "0214a2606ed2b9f3813f995cd86801972bc1af9ddb7a7ada7164b569edbbf355"
+        },
+        {
+          "path": "src/wallets/v5r1/WalletV5R1Actions.ts",
+          "url": "https://raw.githubusercontent.com/ton-org/ton/311dc3313dd31e44781551b398b92256518b2c61/src/wallets/v5r1/WalletV5R1Actions.ts",
+          "sha256": "df38aa31b012d7856874eab64b1aceb8d01f57ccfd626c5ff2d129e4ce690c27"
+        }
+      ],
+      "source_commit": "311dc3313dd31e44781551b398b92256518b2c61",
+      "source_dates": [
+        "2026-10-16T20:39:26.513831+00:00"
+      ],
+      "independence_groups": [
+        "ton-org"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "last_verified": "2026-10-16T20:39:26.513831+00:00",
+      "limitations": [
+        "Multiple apps use the same code; SDK identity is not signing application identity."
+      ]
+    },
+    {
+      "entity_id": "tonkeeper_tongo",
+      "brand": "Tongo",
+      "entity_type": "sdk",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "v3_v4_v5_builders"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tongo/a136487a6dbf7a291680ab5b12da853524076eb5/LICENSE",
+          "sha256": "670f766259a25c2da26b5e29689fec4ca3f3349290c131b78d522cd475dbc7f6"
+        },
+        {
+          "path": "wallet/wallet_v3.go",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tongo/a136487a6dbf7a291680ab5b12da853524076eb5/wallet/wallet_v3.go",
+          "sha256": "e51ccde754a2b46107aa2f0945cfe62dfcb016c7d7b029063538a621dcab5e48"
+        },
+        {
+          "path": "wallet/wallet_v4.go",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tongo/a136487a6dbf7a291680ab5b12da853524076eb5/wallet/wallet_v4.go",
+          "sha256": "e36a404910833f09b8756d2f5ffac09ab68045e9bf882ce0859d6abade81facb"
+        },
+        {
+          "path": "wallet/wallet_v5.go",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tongo/a136487a6dbf7a291680ab5b12da853524076eb5/wallet/wallet_v5.go",
+          "sha256": "ee3e3164f2bdee0ff0a3e157ca8e0a18122bd25030300ffda8d2296c483fc139"
+        }
+      ],
+      "source_commit": "a136487a6dbf7a291680ab5b12da853524076eb5",
+      "source_dates": [
+        "2026-10-16T20:39:27.866518+00:00"
+      ],
+      "independence_groups": [
+        "tonkeeper"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "last_verified": "2026-10-16T20:39:27.866518+00:00",
+      "limitations": [
+        "Open protocol/SDK can be reused; author organisation does not identify a chain signer."
+      ]
+    },
+    {
+      "entity_id": "ton_space",
+      "brand": "TON Space / TON Wallet",
+      "entity_type": "noncustodial_application",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [],
+      "evidence_sources": [
+        {
+          "url": "https://wallet.tg/ton_space_terms_of_use.pdf",
+          "scope": "public_service_documentation_not_account_assignment"
+        }
+      ],
+      "source_dates": [],
+      "independence_groups": [
+        "ton_space"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN; deposits/withdrawals do not bind an arbitrary customer address to this app"
+      },
+      "logo_asset": null,
+      "licence": "Official documentation referenced; no application implementation or logo copied.",
+      "last_verified": "2026-10-16T20:43:41.252102+00:00",
+      "limitations": [
+        "No exclusive public request layout or verified customer deposit assignment was obtained. Service-specific private APIs are not queried."
+      ]
+    },
+    {
+      "entity_id": "wallet_telegram",
+      "brand": "Wallet in Telegram",
+      "entity_type": "custodial_service",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [],
+      "evidence_sources": [
+        {
+          "url": "https://wallet.tg/",
+          "scope": "public_service_documentation_not_account_assignment"
+        }
+      ],
+      "source_dates": [],
+      "independence_groups": [
+        "wallet_telegram"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN; deposits/withdrawals do not bind an arbitrary customer address to this app"
+      },
+      "logo_asset": null,
+      "licence": "Official documentation referenced; no application implementation or logo copied.",
+      "last_verified": "2026-10-16T20:43:41.252121+00:00",
+      "limitations": [
+        "No exclusive public request layout or verified customer deposit assignment was obtained. Service-specific private APIs are not queried."
+      ]
+    },
+    {
+      "entity_id": "cryptobot",
+      "brand": "Crypto Bot",
+      "entity_type": "custodial_service",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [],
+      "evidence_sources": [
+        {
+          "url": "https://help.send.tg/en/collections/10123206-wallet",
+          "scope": "public_service_documentation_not_account_assignment"
+        }
+      ],
+      "source_dates": [],
+      "independence_groups": [
+        "cryptobot"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN; deposits/withdrawals do not bind an arbitrary customer address to this app"
+      },
+      "logo_asset": null,
+      "licence": "Official documentation referenced; no application implementation or logo copied.",
+      "last_verified": "2026-10-16T20:43:41.252127+00:00",
+      "limitations": [
+        "No exclusive public request layout or verified customer deposit assignment was obtained. Service-specific private APIs are not queried."
+      ]
+    },
+    {
+      "entity_id": "xrocket",
+      "brand": "xRocket",
+      "entity_type": "custodial_service",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [],
+      "evidence_sources": [
+        {
+          "url": "https://docs.xrocket.exchange/api/pay/reference/pay-rest-api",
+          "scope": "public_service_documentation_not_account_assignment"
+        }
+      ],
+      "source_dates": [],
+      "independence_groups": [
+        "xrocket"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN; deposits/withdrawals do not bind an arbitrary customer address to this app"
+      },
+      "logo_asset": null,
+      "licence": "Official documentation referenced; no application implementation or logo copied.",
+      "last_verified": "2026-10-16T20:43:41.252130+00:00",
+      "limitations": [
+        "No exclusive public request layout or verified customer deposit assignment was obtained. Service-specific private APIs are not queried."
+      ]
+    },
+    {
+      "entity_id": "tonkeeper_pro",
+      "brand": "Tonkeeper Pro",
+      "entity_type": "signing_application",
+      "supported_networks": [
+        "ton"
+      ],
+      "published_addresses": [],
+      "contract_fingerprints": [],
+      "verified_technical_indicators": [
+        "tonkeeper_query_id_namespace",
+        "ttl_300_seconds",
+        "standard_v3_v4_v5"
+      ],
+      "evidence_sources": [
+        {
+          "path": "LICENSE.txt",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/LICENSE.txt",
+          "sha256": "c7dd1f9f82e5edf288f1312cd3277050e42282f23f0e5a2267a55e5685b1d131"
+        },
+        {
+          "path": "packages/uikit/src/hooks/blockchain/useSendTransfer.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/uikit/src/hooks/blockchain/useSendTransfer.ts",
+          "sha256": "4d21b82f8ef3d311616bcb7374509dfc66b80ab8cdfdd629c48bcd2426715021"
+        },
+        {
+          "path": "packages/uikit/src/hooks/blockchain/useSendMultiTransfer.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/uikit/src/hooks/blockchain/useSendMultiTransfer.ts",
+          "sha256": "4c21c329ca8e40f6e44f15cb8bb59b71168741ea3b29568b2456b68fcfef85b3"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/sender/wallet-message-sender.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/sender/wallet-message-sender.ts",
+          "sha256": "5b96d2e866594247036b62dcc3773815fdb424e6cc045077f50e0a5b386f3a62"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/sender/battery-message-sender.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/sender/battery-message-sender.ts",
+          "sha256": "779285d85d5176383f7b53208dfdb2cab0f52862009290a0c4e3aff49aa11b09"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/encoder/nft-encoder.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/encoder/nft-encoder.ts",
+          "sha256": "70ff8bfce805cacd257e236a12589ef7fef2af1d374ba3c0b9aad1d311b89db4"
+        },
+        {
+          "path": "packages/core/src/service/ton-blockchain/utils.ts",
+          "url": "https://raw.githubusercontent.com/tonkeeper/tonkeeper-web/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/utils.ts",
+          "sha256": "d4d8a7530596dcd5c023078b0dacc38ad32b70b438f372b45ee2d502135c2378"
+        }
+      ],
+      "source_commit": "d7ea32150635b53b8bc6fb6c5744434d9370a347",
+      "source_dates": [
+        "2026-10-16T20:39:22.396821+00:00"
+      ],
+      "independence_groups": [
+        "tonkeeper"
+      ],
+      "confidence_rules": {
+        "signing_application": "UNKNOWN unless unique independently validated evidence exists",
+        "copyable_construction_marker_max": "POSSIBLE hypothesis"
+      },
+      "logo_asset": null,
+      "licence": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "last_verified": "2026-10-16T20:39:22.396821+00:00",
+      "limitations": [
+        "Public Pro interface uses the shared Tonkeeper core; the observed construction marker does not distinguish Pro, mobile, desktop or extension products. Private backend source is unavailable."
+      ]
+    }
+  ],
+  "construction_rules": [
+    {
+      "rule_id": "tonkeeper-query-namespace",
+      "entity_id": "tonkeeper",
+      "kind": "query_id_prefix",
+      "value": "0x546de4ef",
+      "source_urls": [
+        "https://github.com/tonkeeper/tonkeeper-web/blob/d7ea32150635b53b8bc6fb6c5744434d9370a347/packages/core/src/service/ton-blockchain/utils.ts"
+      ],
+      "confidence_ceiling": "POSSIBLE",
+      "scope": "target_originated_successful_token_request"
+    },
+    {
+      "rule_id": "mywallet-fee-cell",
+      "entity_id": "mytonwallet",
+      "kind": "exact_nested_cell_opcode",
+      "value": "0x4d238543",
+      "source_urls": [
+        "https://github.com/mytonwallet-org/mytonwallet/blob/bb3f357690633d274e390e799babaf1d642b31de/src/api/chains/ton/util/tonCore.ts"
+      ],
+      "confidence_ceiling": "POSSIBLE",
+      "scope": "target_originated_successful_token_request"
+    }
+  ]
+}

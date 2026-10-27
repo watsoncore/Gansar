@@ -1,0 +1,468 @@
+{
+  "schema_version": "1.0",
+  "scope": "Only official address-specific Crypto Bot/xRocket role publications, not custody/control guarantees",
+  "anchors": [
+    {
+      "service_id": "cryptobot",
+      "service": "Crypto Bot (@CryptoBot)",
+      "blockchain": "ton",
+      "address": "0:c5bc17376e5ce03438579dee3a427de1a41ea1fa299c88916266edbdaecfa0e3",
+      "cited_address": "EQDFvBc3blzgNDhXne46Qn3hpB6h-imciJFiZu29rs-g46DL",
+      "role": "historical_cold_wallet",
+      "publication_url": "https://t.me/CryptoBotRU/159",
+      "official_channel_binding_url": "https://t.me/s/CryptoBotRU?before=177",
+      "official_channel_binding_file": "official_channel.html",
+      "source_published_at": "2022-12-22T09:43:50+00:00",
+      "observed_at": "2026-10-21T11:22:51.529325+00:00",
+      "capture_sha256": "6cf79d071609f591562e5ee2e5b1ff74b52a4272fdfe4160f9075e2973236f39",
+      "capture_filename": "official_cold159.html",
+      "authority": "official_operator_publication",
+      "claim_scope": "historically_published_role",
+      "current_control": "UNKNOWN",
+      "confirmation_type": "OFFICIAL_SELF_DECLARATION_NOT_SIGNATURE_PROOF",
+      "operator_continuity": "not independently established after the publication date",
+      "secondary_official_publication": {
+        "url": "https://t.me/CryptoBotEN/95?embed=1&mode=tme",
+        "published_at": "2022-12-26T19:08:15+00:00",
+        "capture_file": "official_english_cold95.html",
+        "captured_at": "2026-10-21T11:24:08.794224+00:00",
+        "sha256": "07b1209719dc3e8918fda14660a47b4656b260f87957e91e5d95a09eea35a703",
+        "http_status": 200
+      },
+      "limitations": [
+        "Two languages of the same operator are one authority, not two independent controller proofs.",
+        "Address publication establishes the stated historical role, not custody of its counterparties or current control."
+      ]
+    },
+    {
+      "service_id": "xrocket",
+      "blockchain": "ton",
+      "address": "0:c508766ce55ea185d34a15e6be047f0c7d808585d5fa09c74478c5a0ffeee3de",
+      "cited_address": null,
+      "cited_transaction_hash": "64f48f7e318ff2ebe9a45fc1a1337c7b02346a11a1ffb56845eedfe673eaf1b5",
+      "cited_transaction_url": "https://tonviewer.com/transaction/64f48f7e318ff2ebe9a45fc1a1337c7b02346a11a1ffb56845eedfe673eaf1b5",
+      "role": "published_buyback_burn_wallet",
+      "publication_url": "https://t.me/xrocketnews/346",
+      "official_channel_binding_url": "https://t.me/xrocket",
+      "official_bot_binding_url": "https://docs.xrocket.exchange/support",
+      "source_published_at": "2025-10-01T12:01:31+00:00",
+      "observed_at": "2026-10-21T11:25:24.180174+00:00",
+      "capture_sha256": "273e19210fa85313d748fb154b0467971bd235ab71825e97074480852c267fb1",
+      "capture_filename": "older_burn_post346.html",
+      "authority": "official_operator_publication_with_exact_chain_transaction_binding",
+      "claim_scope": "published_roles_only",
+      "current_control": "UNKNOWN",
+      "category": "CONFIRMED SERVICE ADDRESS",
+      "derived_address_basis": {
+        "method": "exact_officially_cited_tx_hash_to_successful_native_source_account",
+        "transaction_hash": "64f48f7e318ff2ebe9a45fc1a1337c7b02346a11a1ffb56845eedfe673eaf1b5",
+        "native_account": "0:c508766ce55ea185d34a15e6be047f0c7d808585d5fa09c74478c5a0ffeee3de",
+        "source_raw_filename": "older_burn_official_transaction.json",
+        "source_url": "https://tonapi.io/v2/blockchain/transactions/64f48f7e318ff2ebe9a45fc1a1337c7b02346a11a1ffb56845eedfe673eaf1b5",
+        "source_sha256": "e993d1a51726d08518f15381372f55d7787d79c8f7e4ef1aee28692d605d483b",
+        "source_observed_at": "2026-10-21T11:25:23.192679+00:00",
+        "chain_operation_timestamp_utc": "2025-09-30T11:03:56+00:00",
+        "source_success": true,
+        "actual_message_destination": "0:cd73b00a4e13a0e92155bef7b7f8e1d92b32642cd9dd554f7b1bab07cba9f55e",
+        "actual_burn_opcode": "0x595f07bc",
+        "actual_burn_raw_amount": "2860000000000000",
+        "decoded_event_provenance": {
+          "filename": "older346_event.json",
+          "sha256": "6e0c4b5b749ed9a0cc51b269882e102ebf689d6396aff103d000a5a16aca59c5",
+          "successful_jetton_burn": true,
+          "master_address": "0:157c463688a4a91245218052c5580807792cf6347d9757e32f0ee88a179a6549",
+          "amount": "2860000",
+          "decimals": 9
+        }
+      },
+      "checks": {
+        "official_publication_contains_exact_full_transaction_href": true,
+        "fetched_transaction_hash_exactly_matches_publication": true,
+        "transaction_native_account_equals_anchor": true,
+        "source_transaction_successful": true,
+        "outgoing_message_is_actual_jetton_burn": true,
+        "exact_2860000XROCK_matches_official_burn_amount": true,
+        "event_confirms_successful_burn_with_exact_master": true
+      },
+      "limitations": [
+        "Official post cites transaction rather than printing raw wallet address. The address is an exact derived binding, not a nickname match.",
+        "Source role publication establishes buyback/burn association from 2025-10-01, not custody hot-wallet or current cryptographic control.",
+        "TonAPI event and raw transaction share an upstream and are not counted as independent operator attestations.",
+        "Latest publication402 independently reiterates the same wallet role in 2026; deduplicate as one anchor address."
+      ],
+      "later_direct_address_publication": {
+        "service_id": "xrocket",
+        "blockchain": "ton",
+        "address": "0:c508766ce55ea185d34a15e6be047f0c7d808585d5fa09c74478c5a0ffeee3de",
+        "cited_address": "0:c508766ce55ea185d34a15e6be047f0c7d808585d5fa09c74478c5a0ffeee3de",
+        "role": "published_buyback_burn_wallet",
+        "publication_url": "https://t.me/xrocketnews/402",
+        "official_channel_binding_url": "https://t.me/xrocket",
+        "official_bot_binding_url": "https://docs.xrocket.exchange/support",
+        "source_published_at": "2026-10-01T12:33:42+00:00",
+        "observed_at": "2026-10-21T11:24:06.233333+00:00",
+        "capture_sha256": "e6b37b1ee8e5b60b99a007ed2fa3de49307a6c95af8ca6b201b0e3d947c217db",
+        "capture_filename": "official_burn_post402.html",
+        "authority": "official_operator_publication",
+        "claim_scope": "published_roles_only",
+        "current_control": "UNKNOWN",
+        "category": "CONFIRMED SERVICE ADDRESS",
+        "historical_exact_transaction_publication": {
+          "url": "https://t.me/xrocketnews/346",
+          "tx_hash": "64f48f7e318ff2ebe9a45fc1a1337c7b02346a11a1ffb56845eedfe673eaf1b5",
+          "published_at": "2025-10-01T12:01:31+00:00"
+        },
+        "limitations": [
+          "Official association is buyback/burn treasury role. Custodial hot-wallet, deposit assignment and signing application are not established.",
+          "Publication is not an independent cryptographic proof of current private-key control.",
+          "Related token master/jetton wallets are not merged into common ownership.",
+          "No retrospective operator claim before the recorded publication dates."
+        ]
+      }
+    }
+  ],
+  "public_labels": [
+    {
+      "service_id": "cryptobot",
+      "blockchain": "tron",
+      "address": "TDQGjokXajM8SrL5tdE5mSQk252YreRc72",
+      "label": "Crypto Bot: Deposit Address",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://blocksec.com/phalcon/compliance/report/tron/TAnTKDLSKLig2F6DegrXiwUKSmNreoJQKv",
+      "observed_at": "2026-10-23T14:31:47.360508+00:00",
+      "source_published_at": "2026-04-02T18:29:58.899Z",
+      "capture_sha256": "a66d42bc8046b1611a343ff35039e2073be6265cdd40216525ace3367c7e50a0",
+      "role": "provider_labelled_deposit_address",
+      "claim_scope": "public_provider_label_only",
+      "status": "PROBABLE",
+      "current_control": "UNKNOWN",
+      "limitations": [
+        "BlockSec provider attribution, not operator self-publication or signed control proof.",
+        "Historical report snapshot; deposit assignment may change.",
+        "Aggregate counterpart amount is not a single chain transfer."
+      ]
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "bsc",
+      "address": "0x0defbb1b77a65e3bdf2b6e3b0ca644183e48f9b8",
+      "label": "Crypto Bot: Hot Wallet (No Kyc)",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://blocksec.com/phalcon/compliance/report/bsc/0xa136c978ffb6763180df430bed36f6553c5dece2",
+      "observed_at": "2026-10-23T14:33:54.011539+00:00",
+      "source_published_at": "2026-09-30T01:41:40.796000+00:00",
+      "capture_sha256": "e935cf40b37e46f20ad50be47427049a18dce77cc5f0ff3062da22cbc2e51830",
+      "role": "provider_labelled_hot_wallet",
+      "claim_scope": "public_provider_label_only",
+      "status": "PROBABLE",
+      "current_control": "UNKNOWN",
+      "limitations": [
+        "Third-party provider attribution only; not operator confirmation or signed control.",
+        "Historical report snapshot; label freshness is limited.",
+        "Reported risk routes/aggregates are not imported as physical transfers."
+      ]
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "eth",
+      "address": "0x4c77efcb44eeed89ab54cc0aeba64b2ddf919096",
+      "label": "Crypto Bot: Hot Wallet",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://blocksec.com/phalcon/compliance/report/ethereum/0x452d50e7508af8285f9c145e11f825ee22d95927",
+      "observed_at": "2026-10-23T14:33:54.247565+00:00",
+      "source_published_at": "2026-05-29T15:02:14.310000+00:00",
+      "capture_sha256": "48f01dd931a12a12de84e56fd512fbace7673dd18fd75eff441fbd73e221bf85",
+      "role": "provider_labelled_hot_wallet",
+      "claim_scope": "public_provider_label_only",
+      "status": "PROBABLE",
+      "current_control": "UNKNOWN",
+      "limitations": [
+        "Third-party provider attribution only; not operator confirmation or signed control.",
+        "Historical report snapshot; label freshness is limited.",
+        "Reported risk routes/aggregates are not imported as physical transfers."
+      ]
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "tron",
+      "address": "TXeLzi1AV2XKaa3fRrT4vt7jEsg7ZJeWAU",
+      "label": "Crypto Bot: Hot Wallet",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://blocksec.com/phalcon/compliance/report/Tron/TMS4EqGHnjWiwtMHBmjEQRWS48jWJBRRrJ",
+      "observed_at": "2026-10-23T14:33:54.260206+00:00",
+      "source_published_at": "2026-07-04T16:42:11.574000+00:00",
+      "capture_sha256": "352c6b00424bd75a171045872e32250a7619163e79bf335c1bc0e5be75c73bc5",
+      "role": "provider_labelled_hot_wallet",
+      "claim_scope": "public_provider_label_only",
+      "status": "PROBABLE",
+      "current_control": "UNKNOWN",
+      "limitations": [
+        "Third-party provider attribution only; not operator confirmation or signed control.",
+        "Historical report snapshot; label freshness is limited.",
+        "Reported risk routes/aggregates are not imported as physical transfers."
+      ]
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "ton",
+      "address": "0:fdc97553829b5c1c05acd4c560793c85601079a6da99ef2aba9a181f6a13b5a9",
+      "label": "Crypto Bot 1",
+      "role": "publicly_labelled_service_address",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://address-book.tonscan.org/addresses.json",
+      "observed_at": "2026-10-23T17:09:13.984261+00:00",
+      "source_published_at": "2026-10-13T19:16:17Z",
+      "capture_sha256": "35c01cfc3ab3f3c640e5145e7a7f18f996730ca696561648ff98ed876905a7ca",
+      "cited_address": "EQD9yXVTgptcHAWs1MVgeTyFYBB5ptqZ7yq6mhgfahO1qdZT",
+      "label_source_commit_url": "https://github.com/catchain/address-book/commit/dbc11c96c120fda9c49c0bdf25a0ed35eae1e499",
+      "claim_scope": "public_provider_label_only; historical controller not authenticated",
+      "current_control": "UNKNOWN",
+      "label_status": "PROBABLE"
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "ton",
+      "address": "0:ec85cfc7fd1009362e421b5a0141f510d6540107ab73e7829fda1ef9e97a75e3",
+      "label": "Crypto Bot 2",
+      "role": "publicly_labelled_service_address",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://address-book.tonscan.org/addresses.json",
+      "observed_at": "2026-10-23T17:09:13.984261+00:00",
+      "source_published_at": "2026-10-13T19:16:17Z",
+      "capture_sha256": "35c01cfc3ab3f3c640e5145e7a7f18f996730ca696561648ff98ed876905a7ca",
+      "cited_address": "EQDshc_H_RAJNi5CG1oBQfUQ1lQBB6tz54Kf2h756Xp14_Cv",
+      "label_source_commit_url": "https://github.com/catchain/address-book/commit/dbc11c96c120fda9c49c0bdf25a0ed35eae1e499",
+      "claim_scope": "public_provider_label_only; historical controller not authenticated",
+      "current_control": "UNKNOWN",
+      "label_status": "PROBABLE"
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "ton",
+      "address": "0:ad8afecfacc248996885d8be6824280f9f3a7e54c2f6080b7971b9f556c280c4",
+      "label": "Old Crypto Bot",
+      "role": "publicly_labelled_service_address",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://address-book.tonscan.org/addresses.json",
+      "observed_at": "2026-10-23T17:09:13.984261+00:00",
+      "source_published_at": null,
+      "capture_sha256": "35c01cfc3ab3f3c640e5145e7a7f18f996730ca696561648ff98ed876905a7ca",
+      "cited_address": "UQCtiv7PrMJImWiF2L5oJCgPnzp-VML2CAt5cbn1VsKAxOVB",
+      "label_source_commit_url": null,
+      "claim_scope": "public_provider_label_only; historical controller not authenticated",
+      "current_control": "UNKNOWN",
+      "label_status": "PROBABLE"
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "ton",
+      "address": "0:c5bc17376e5ce03438579dee3a427de1a41ea1fa299c88916266edbdaecfa0e3",
+      "label": "Crypto Bot Cold Storage",
+      "role": "publicly_labelled_service_address",
+      "authority": "provider_public_address_label",
+      "publication_url": "https://address-book.tonscan.org/addresses.json",
+      "observed_at": "2026-10-23T17:09:13.984261+00:00",
+      "source_published_at": null,
+      "capture_sha256": "35c01cfc3ab3f3c640e5145e7a7f18f996730ca696561648ff98ed876905a7ca",
+      "cited_address": "UQDFvBc3blzgNDhXne46Qn3hpB6h-imciJFiZu29rs-g4_0O",
+      "label_source_commit_url": null,
+      "claim_scope": "public_provider_label_only; historical controller not authenticated",
+      "current_control": "UNKNOWN",
+      "label_status": "PROBABLE"
+    }
+  ],
+  "published_transactions": [
+    {
+      "service_id": "cryptobot",
+      "blockchain": "btc",
+      "transaction_hash": "32b605a163ce07140590b914f00e062ea8e9c397e4ea00fdbc40f9e08f6348c9",
+      "role": "officially_published_historical_deposit_consolidation",
+      "authority": "official_operator_transaction_publication",
+      "publication_url": "https://t.me/CryptoBotEN/124",
+      "source_published_at": "2023-05-13T19:13:12+00:00",
+      "capture_sha256": "ed22ed824cea4ac986cd2f205648dbf480013cdf3b9acec6520edfa79ce66269",
+      "capture_file": "cryptobot_btc_official_history.html",
+      "source_url": "https://blockstream.info/api/tx/32b605a163ce07140590b914f00e062ea8e9c397e4ea00fdbc40f9e08f6348c9",
+      "source_sha256": "f5a48210a19318d020e753ae4fb0a5daf40685d87ddda1210c1209cb8b236dd0",
+      "source_observed_at": "2026-10-23T14:36:48.113426+00:00",
+      "block_time_utc": "2023-05-12T04:10:07+00:00",
+      "inputs_count": 345,
+      "outputs": [
+        {
+          "index": 0,
+          "address": "bc1qqsw2sqc7ezpztrrtqgvnd83p5dznz9j7hy3xyj",
+          "value_sats": 27123580,
+          "amount_decimal": "0.2712358"
+        },
+        {
+          "index": 1,
+          "address": "bc1qpv94yxdqfd6k9h5rt76nyr5vgtzvgka5p8ny28",
+          "value_sats": 43601,
+          "amount_decimal": "0.00043601"
+        }
+      ],
+      "sum_inputs_sats": 47487019,
+      "sum_outputs_sats": 27167181,
+      "fee_sats": 20319838,
+      "checks": {
+        "exact_official_linked_tx": true,
+        "txid_exact": true,
+        "confirmed": true,
+        "input_output_fee_balances": true
+      },
+      "claim_scope": "published_transaction_only",
+      "current_address_control": "UNKNOWN",
+      "endpoint_role": "AMBIGUOUS",
+      "limitations": [
+        "Operator describes listed consolidation transactions, without printing which output is hot wallet versus change.",
+        "Do not promote any output or all input addresses to confirmed service-owned addresses.",
+        "A later counterparty of any participant is not automatically linked to CryptoBot.",
+        "This is a 2023 historical event; current service control is unproven."
+      ]
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "btc",
+      "transaction_hash": "cb41d9160b151811a0c01689e00d9e2e1e7a1898b08c5b7f4de52c17ee22b2a1",
+      "role": "officially_published_historical_deposit_consolidation",
+      "authority": "official_operator_transaction_publication",
+      "publication_url": "https://t.me/CryptoBotEN/124",
+      "source_published_at": "2023-05-13T19:13:12+00:00",
+      "capture_sha256": "ed22ed824cea4ac986cd2f205648dbf480013cdf3b9acec6520edfa79ce66269",
+      "capture_file": "cryptobot_btc_official_history.html",
+      "source_url": "https://blockstream.info/api/tx/cb41d9160b151811a0c01689e00d9e2e1e7a1898b08c5b7f4de52c17ee22b2a1",
+      "source_sha256": "0ca3258d0fcbcd4cadeac170b6caf840886ed4435a815d72c8a7437eb7500635",
+      "source_observed_at": "2026-10-23T14:36:48.761069+00:00",
+      "block_time_utc": "2023-05-12T03:46:45+00:00",
+      "inputs_count": 72,
+      "outputs": [
+        {
+          "index": 0,
+          "address": "bc1qumpfp9pvhjmzrr9v0vkfq09435l6jf2c6r7e8y",
+          "value_sats": 6718039,
+          "amount_decimal": "0.06718039"
+        },
+        {
+          "index": 1,
+          "address": "bc1qpv94yxdqfd6k9h5rt76nyr5vgtzvgka5p8ny28",
+          "value_sats": 42577,
+          "amount_decimal": "0.00042577"
+        }
+      ],
+      "sum_inputs_sats": 11294583,
+      "sum_outputs_sats": 6760616,
+      "fee_sats": 4533967,
+      "checks": {
+        "exact_official_linked_tx": true,
+        "txid_exact": true,
+        "confirmed": true,
+        "input_output_fee_balances": true
+      },
+      "claim_scope": "published_transaction_only",
+      "current_address_control": "UNKNOWN",
+      "endpoint_role": "AMBIGUOUS",
+      "limitations": [
+        "Operator describes listed consolidation transactions, without printing which output is hot wallet versus change.",
+        "Do not promote any output or all input addresses to confirmed service-owned addresses.",
+        "A later counterparty of any participant is not automatically linked to CryptoBot.",
+        "This is a 2023 historical event; current service control is unproven."
+      ]
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "btc",
+      "transaction_hash": "334cb313470bdfd4153d4850c1be30f5f2d010f6f58dbd77a8524fec54f21366",
+      "role": "officially_published_historical_deposit_consolidation",
+      "authority": "official_operator_transaction_publication",
+      "publication_url": "https://t.me/CryptoBotEN/124",
+      "source_published_at": "2023-05-13T19:13:12+00:00",
+      "capture_sha256": "ed22ed824cea4ac986cd2f205648dbf480013cdf3b9acec6520edfa79ce66269",
+      "capture_file": "cryptobot_btc_official_history.html",
+      "source_url": "https://blockstream.info/api/tx/334cb313470bdfd4153d4850c1be30f5f2d010f6f58dbd77a8524fec54f21366",
+      "source_sha256": "715627189d0db26bf9090cb59e7d73d43427a5d5de065c24dfebc09d5c509d23",
+      "source_observed_at": "2026-10-23T14:36:47.001734+00:00",
+      "block_time_utc": "2023-05-11T19:36:25+00:00",
+      "inputs_count": 29,
+      "outputs": [
+        {
+          "index": 0,
+          "address": "bc1qu2dnxwsszftndvnqdmaadupgerwn38xh3ax6c9",
+          "value_sats": 2148850,
+          "amount_decimal": "0.0214885"
+        },
+        {
+          "index": 1,
+          "address": "bc1qpv94yxdqfd6k9h5rt76nyr5vgtzvgka5p8ny28",
+          "value_sats": 64709,
+          "amount_decimal": "0.00064709"
+        }
+      ],
+      "sum_inputs_sats": 4202522,
+      "sum_outputs_sats": 2213559,
+      "fee_sats": 1988963,
+      "checks": {
+        "exact_official_linked_tx": true,
+        "txid_exact": true,
+        "confirmed": true,
+        "input_output_fee_balances": true
+      },
+      "claim_scope": "published_transaction_only",
+      "current_address_control": "UNKNOWN",
+      "endpoint_role": "AMBIGUOUS",
+      "limitations": [
+        "Operator describes listed consolidation transactions, without printing which output is hot wallet versus change.",
+        "Do not promote any output or all input addresses to confirmed service-owned addresses.",
+        "A later counterparty of any participant is not automatically linked to CryptoBot.",
+        "This is a 2023 historical event; current service control is unproven."
+      ]
+    },
+    {
+      "service_id": "cryptobot",
+      "blockchain": "btc",
+      "transaction_hash": "fea9c694829eb84b789867b3b8f74c2c0fc476f8c7e5698065baaf3d2a038c37",
+      "role": "officially_published_historical_deposit_consolidation",
+      "authority": "official_operator_transaction_publication",
+      "publication_url": "https://t.me/CryptoBotEN/124",
+      "source_published_at": "2023-05-13T19:13:12+00:00",
+      "capture_sha256": "ed22ed824cea4ac986cd2f205648dbf480013cdf3b9acec6520edfa79ce66269",
+      "capture_file": "cryptobot_btc_official_history.html",
+      "source_url": "https://blockstream.info/api/tx/fea9c694829eb84b789867b3b8f74c2c0fc476f8c7e5698065baaf3d2a038c37",
+      "source_sha256": "292746fe459057d52b32cde5e2a1e1d1751332fbab3bb1d9fda9941476653785",
+      "source_observed_at": "2026-10-23T14:36:48.596648+00:00",
+      "block_time_utc": "2023-05-11T14:08:29+00:00",
+      "inputs_count": 12,
+      "outputs": [
+        {
+          "index": 0,
+          "address": "3AQEd5i5X1MYNh5KivXrC6yqQEdAhbHA4w",
+          "value_sats": 930618,
+          "amount_decimal": "0.00930618"
+        },
+        {
+          "index": 1,
+          "address": "bc1qpv94yxdqfd6k9h5rt76nyr5vgtzvgka5p8ny28",
+          "value_sats": 62998,
+          "amount_decimal": "0.00062998"
+        }
+      ],
+      "sum_inputs_sats": 1926690,
+      "sum_outputs_sats": 993616,
+      "fee_sats": 933074,
+      "checks": {
+        "exact_official_linked_tx": true,
+        "txid_exact": true,
+        "confirmed": true,
+        "input_output_fee_balances": true
+      },
+      "claim_scope": "published_transaction_only",
+      "current_address_control": "UNKNOWN",
+      "endpoint_role": "AMBIGUOUS",
+      "limitations": [
+        "Operator describes listed consolidation transactions, without printing which output is hot wallet versus change.",
+        "Do not promote any output or all input addresses to confirmed service-owned addresses.",
+        "A later counterparty of any participant is not automatically linked to CryptoBot.",
+        "This is a 2023 historical event; current service control is unproven."
+      ]
+    }
+  ]
+}

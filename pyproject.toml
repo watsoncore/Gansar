@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crypto-osint"
+version = "0.3.1"
+description = "Crypto OSINT address and evidence-based TON NFT investigation tool"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",
+    "httpx>=0.27",
+    "jinja2>=3.1",
+    "selectolax>=0.3.21",
+    "networkx>=3.3",
+    "reportlab>=4.2",
+    "playwright>=1.44",
+    "rich>=13.7",
+    "PyYAML>=6.0",
+    "ens-normalize>=3.0.10,<4",
+]
+
+[project.scripts]
+gansar = "app.main:main"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.setuptools.package-data]
+"app.exporters" = ["*.html", "*.json", "assets/*", "assets/**/*"]
+"app.attribution" = ["assets/*", "assets/**/*"]
+
