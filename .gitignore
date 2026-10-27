@@ -32,19 +32,11 @@ build/
 dist/
 *.egg-info/
 
-# Local investigations and QA; retain only small public test fixtures.
-/validation/*
-!/validation/attribution_master/
-/validation/attribution_master/*
-!/validation/attribution_master/presentation_baseline.json
-!/validation/advanced_inference_20261020/
-/validation/advanced_inference_20261020/*
-!/validation/advanced_inference_20261020/research/
-/validation/advanced_inference_20261020/research/*
-!/validation/advanced_inference_20261020/research/captures/
-/validation/advanced_inference_20261020/research/captures/*
-!/validation/advanced_inference_20261020/research/captures/wormhole_sample_receipt.json
-!/validation/advanced_inference_20261020/research/captures/wormhole_sample_vaa_response.json
+# Local investigations and QA; public fixtures live in tests/fixtures/.
+/validation/
+# Optional local report customization; bundled defaults live in exporter assets.
+/fon/
+/logo/
 
 # Historical case notes remain local; public docs are README and PROJECT_MAP.
 # Publish only reviewed interface screenshots; other images remain local.

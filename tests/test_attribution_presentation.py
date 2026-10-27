@@ -196,7 +196,7 @@ class AttributionPresentationTests(unittest.TestCase):
     def test_original_css_and_navigation_are_unchanged(self):
         root = Path(__file__).resolve().parents[1]
         template = (root / "app/exporters/investigation_template.html").read_text(encoding="utf-8")
-        baseline = json.loads((root / "validation/attribution_master/presentation_baseline.json").read_text(encoding="utf-8"))
+        baseline = json.loads((root / "tests/fixtures/attribution/presentation_baseline.json").read_text(encoding="utf-8"))
         for name, pattern in (("css_sha256", r"<style>(.*?)</style>"),
                               ("navigation_sha256", r'<section class="panel nav">(.*?)</section>')):
             content=re.search(pattern,template,re.S).group(1)

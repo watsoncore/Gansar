@@ -6,7 +6,7 @@ import unittest
 
 from app.attribution.cross_chain import analyze_cross_chain, receipt_targets
 
-CAPTURES = Path(__file__).resolve().parents[1] / 'validation/advanced_inference_20261020/research/captures'
+CAPTURES = Path(__file__).resolve().parent / 'fixtures/cross_chain'
 TXID = '0x3ad91ec530187bb2ce3b394d587878cd1e9e037a97e51fbc34af89b2e0719367'
 MESSAGE_ID = '2/0000000000000000000000003ee18b2214aff97000d974cf647e7c347e8fa585/164170'
 

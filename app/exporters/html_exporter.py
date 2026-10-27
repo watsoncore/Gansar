@@ -1359,7 +1359,8 @@ def _copy_media(output_dir: Path, path: Path, folder: str, mime: str) -> str:
 
 def _fon_media(output_dir: Path) -> dict:
     project_root = Path(__file__).resolve().parents[2]
-    roots = [project_root / "fon", Path.cwd() / "crypto_osint" / "fon", Path.cwd() / "fon"]
+    roots = [project_root / "fon", Path.cwd() / "crypto_osint" / "fon", Path.cwd() / "fon",
+             output_dir / "fon", Path(__file__).with_name("assets") / "report-backgrounds"]
     seen = set()
     for root in roots:
         try:
@@ -1385,7 +1386,8 @@ def _logo_config(output_dir: Path) -> dict:
 
 def _logo_media(output_dir: Path) -> dict:
     project_root = Path(__file__).resolve().parents[2]
-    roots = [project_root / "logo", Path.cwd() / "crypto_osint" / "logo", Path.cwd() / "logo"]
+    roots = [project_root / "logo", Path.cwd() / "crypto_osint" / "logo", Path.cwd() / "logo",
+             output_dir / "logo", Path(__file__).with_name("assets") / "report-logos"]
     seen = set()
     for root in roots:
         try:
